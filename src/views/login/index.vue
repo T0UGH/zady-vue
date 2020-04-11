@@ -11,10 +11,10 @@
           <svg-icon icon-class="user" />
         </span>
         <el-input
-          ref="username"
-          v-model="loginForm.username"
-          placeholder="Username"
-          name="username"
+          ref="email"
+          v-model="loginForm.email"
+          placeholder="email"
+          name="email"
           type="text"
           tabindex="1"
           auto-complete="on"
@@ -54,6 +54,7 @@
 
 <script>
 import { validUsername } from '@/utils/validate'
+import { login } from '@/api/user'
 
 export default {
   name: 'Login',
@@ -74,11 +75,11 @@ export default {
     }
     return {
       loginForm: {
-        username: 'admin',
+        email: 'admin',
         password: '111111'
       },
       loginRules: {
-        username: [{ required: true, trigger: 'blur', validator: validateUsername }],
+        email: [{ required: true, trigger: 'blur', validator: validateUsername }],
         password: [{ required: true, trigger: 'blur', validator: validatePassword }]
       },
       loading: false,
@@ -105,15 +106,23 @@ export default {
         this.$refs.password.focus()
       })
     },
-    handleLogin() {
+    handleLogin: function() {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           this.loading = true
-          this.$store.dispatch('user/login', this.loginForm).then(() => {
+          login({ email: this.loginForm.email.trim(), password: this.loginForm.password }).then(res => {
+            const { body } = res
+            this.$store.commit('user/SET_TOKEN', body.token)
+            this.$store.commit('user/SET_NAME', body.name)
+            this.$store.commit('user/SET_AVATAR', body.avatar)
+            this.$store.commit('user/SET_ROLE', body.role.role)
+            this.$store.commit('user/SET_CURRENT_PROJECT_ID', body.defaultProjectId)
+          }).then(() => {
+            console.log('here')
             this.$router.push({ path: this.redirect || '/' })
             this.loading = false
-          }).catch(() => {
-            this.loading = false
+          }).catch((e) => {
+            console.log(e)
           })
         } else {
           console.log('error submit!!')

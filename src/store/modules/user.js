@@ -4,9 +4,11 @@ import { resetRouter } from '@/router'
 
 const getDefaultState = () => {
   return {
-    token: getToken(),
+    token: undefined,
     name: '',
-    avatar: ''
+    avatar: '',
+    role: '',
+    currentProjectId: undefined
   }
 }
 
@@ -24,45 +26,55 @@ const mutations = {
   },
   SET_AVATAR: (state, avatar) => {
     state.avatar = avatar
+  },
+  SET_ROLE: (state, role) => {
+    state.role = role
+  },
+  SET_CURRENT_PROJECT_ID: (state, id) => {
+    state.currentProjectId = id
   }
 }
 
 const actions = {
   // user login
-  login({ commit }, userInfo) {
-    const { username, password } = userInfo
-    return new Promise((resolve, reject) => {
-      login({ username: username.trim(), password: password }).then(response => {
-        const { data } = response
-        commit('SET_TOKEN', data.token)
-        setToken(data.token)
-        resolve()
-      }).catch(error => {
-        reject(error)
-      })
-    })
-  },
+  // login({ commit }, userInfo) {
+  //   const { email, password } = userInfo
+  //   return new Promise((resolve, reject) => {
+  //     login({ email: email.trim(), password: password }).then(response => {
+  //       const { body } = response
+  //       commit('SET_TOKEN', body.token)
+  //       commit('SET_NAME', body.name)
+  //       commit('SET_AVATAR', body.avatar)
+  //       commit('SET_ROLE', body.role.role)
+  //       setToken(body.token)
+  //       resolve()
+  //     }).catch(error => {
+  //       console.log(error)
+  //       reject(error)
+  //     })
+  //   })
+  // },
 
   // get user info
-  getInfo({ commit, state }) {
-    return new Promise((resolve, reject) => {
-      getInfo(state.token).then(response => {
-        const { data } = response
-
-        if (!data) {
-          reject('Verification failed, please Login again.')
-        }
-
-        const { name, avatar } = data
-
-        commit('SET_NAME', name)
-        commit('SET_AVATAR', avatar)
-        resolve(data)
-      }).catch(error => {
-        reject(error)
-      })
-    })
-  },
+  // getInfo({ commit, state }) {
+  //   return new Promise((resolve, reject) => {
+  //     getInfo(state.token).then(response => {
+  //       const { data } = response
+  //
+  //       if (!data) {
+  //         reject('Verification failed, please Login again.')
+  //       }
+  //
+  //       const { name, avatar } = data
+  //
+  //       commit('SET_NAME', name)
+  //       commit('SET_AVATAR', avatar)
+  //       resolve(data)
+  //     }).catch(error => {
+  //       reject(error)
+  //     })
+  //   })
+  // },
 
   // user logout
   logout({ commit, state }) {
