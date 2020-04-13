@@ -56,6 +56,28 @@ export const constantRoutes = [
   },
 
   {
+    path: '/project',
+    component: Layout,
+    redirect: '/project/update',
+    name: '项目管理',
+    meta: { title: '项目管理', icon: 'example' },
+    children: [
+      {
+        path: 'update',
+        name: '当前项目',
+        component: () => import('@/views/project/update/index'),
+        meta: { title: '当前项目', icon: 'form' }
+      },
+      {
+        path: 'insert',
+        name: '新建项目',
+        component: () => import('@/views/project/insert/index'),
+        meta: { title: '新建项目', icon: 'form' }
+      }
+    ]
+  },
+
+  {
     path: '/example',
     component: Layout,
     redirect: '/example/table',

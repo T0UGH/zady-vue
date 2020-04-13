@@ -6,3 +6,26 @@ export function getProjectsByUser(userId) {
     method: 'get'
   })
 }
+
+export function getProjectById(projectId) {
+  return request({
+    url: '/project/' + projectId,
+    method: 'get'
+  })
+}
+
+export function updateProject(project) {
+  return request({
+    url: '/project',
+    method: 'put',
+    data: project
+  })
+}
+
+export function insertProject(project) {
+  return request({
+    url: '/project',
+    method: 'post',
+    data: project
+  })
+}

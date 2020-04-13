@@ -18,7 +18,7 @@
           </router-link>
           <el-dropdown-item>
             <el-dropdown @command="handleCommand">
-              <span>项目: {{currentProjectName}}<i class="el-icon-caret-bottom" /></span>
+              <span>项目: {{ currentProject? currentProject.name: '' }}<i class="el-icon-caret-bottom"/></span>
               <el-dropdown-menu slot="dropdown">
                 <el-dropdown-item v-for="project in projectList" :command="project.projectId" :key="project.projectId">{{ project.name }}</el-dropdown-item>
               </el-dropdown-menu>
@@ -49,33 +49,21 @@ export default {
   },
   data() {
     return {
-      currentProjectName: '',
-      projectList: []
     }
   },
   computed: {
     ...mapGetters([
       'sidebar',
-      'avatar'
+      'avatar',
+      'projectList',
+      'currentProject',
+      'currentProjectId'
     ])
   },
   beforeCreate: function() {
     console.log(this)
-    const projectId = this.$store.state.user.currentProjectId
+    const projectId = this.currentProjectId
     console.log(projectId)
-    if (projectId) {
-      getProjectsByUser(projectId).then(res => {
-        console.log(res)
-        res.body.forEach(project => {
-          if (project.projectId === projectId) {
-            this.currentProjectName = project.name
-          }
-        })
-        this.projectList = res.body
-      }).catch(e => {
-        console.log(e)
-      })
-    }
     // todo: 这里实现的是直接跳转到创建一个项目的界面
   },
   methods: {
@@ -88,22 +76,27 @@ export default {
       this.$store.commit('permission/RESET_ROUTES')
       this.$router.push(`/login?redirect=${this.$route.fullPath}`)
     },
-    handleCommand(projectId) {
-      this.$message('click on item ' + projectId)
-      switchProject(projectId).then(res => {
+    handleCommand: async function(projectId) {
+      try {
+        const res = await switchProject(projectId)
+        console.log(res)
         this.$store.commit('user/SET_CURRENT_PROJECT_ID', projectId)
         this.$store.commit('user/SET_TOKEN', res.body)
-        this.projectList.forEach(async project => {
+        this.projectList.forEach(project => {
           if (project.projectId === projectId) {
-            this.currentProjectName = project.name
+            this.$store.commit('user/SET_CURRENT_PROJECT', project)
             this.$store.commit('user/SET_ROLES', project.role.role.split(','))
           }
-          resetRouter()
-          this.$store.commit('permission/RESET_ROUTES')
-          await generateRoutes()
         })
+        resetRouter()
+        this.$store.commit('permission/RESET_ROUTES')
+        await generateRoutes()
+        this.$message('切换项目成功 ' + projectId)
         this.$router.push(`/`)
-      })
+      } catch (e) {
+        this.$message('切换项目失败 ' + projectId)
+        console.log(e)
+      }
     }
   }
 }

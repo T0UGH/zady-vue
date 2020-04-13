@@ -57,6 +57,7 @@ import { validUsername } from '@/utils/validate'
 import { login } from '@/api/user'
 import router from '@/router'
 import { resetRouter } from '@/router'
+import { getProjectsByUser } from '../../api/project'
 
 export default {
   name: 'Login',
@@ -108,31 +109,35 @@ export default {
         this.$refs.password.focus()
       })
     },
-    handleLogin: function() {
-      this.$refs.loginForm.validate(valid => {
+    handleLogin: async function() {
+      try {
+        const valid = await this.$refs.loginForm.validate()
+        console.log(valid)
         if (valid) {
           this.loading = true
-          login({ email: this.loginForm.email.trim(), password: this.loginForm.password }).then(res => {
-            const { body } = res
-            this.$store.commit('user/SET_TOKEN', body.token)
-            this.$store.commit('user/SET_NAME', body.name)
-            this.$store.commit('user/SET_AVATAR', body.avatar)
-            const roleStr = body.role.role
-            const roleArr = roleStr.split(',')
-            this.$store.commit('user/SET_ROLES', roleArr)
-            this.$store.commit('user/SET_CURRENT_PROJECT_ID', body.defaultProjectId)
-          }).then(() => {
-            console.log('here')
-            this.$router.push({ path: this.redirect || '/' })
-            this.loading = false
-          }).catch((e) => {
-            console.log(e)
-          })
+          const res = await login({ email: this.loginForm.email.trim(), password: this.loginForm.password })
+          const { body } = res
+          this.$store.commit('user/SET_TOKEN', body.token)
+          this.$store.commit('user/SET_NAME', body.name)
+          this.$store.commit('user/SET_AVATAR', body.avatar)
+          this.$store.commit('user/SET_USER_ID', body.userId)
+          const roleStr = body.role.role
+          const roleArr = roleStr.split(',')
+          this.$store.commit('user/SET_ROLES', roleArr)
+          this.$store.commit('user/SET_CURRENT_PROJECT_ID', body.defaultProjectId)
+          if (this.$store.getters.userId) {
+            await this.$store.dispatch('user/getProjectsByUser')
+          }
+          this.$router.push({ path: this.redirect || '/' })
+          this.loading = false
         } else {
-          console.log('error submit!!')
+          this.loading = false
           return false
         }
-      })
+      } catch (e) {
+        console.log(e)
+        this.loading = false
+      }
     }
   }
 }
