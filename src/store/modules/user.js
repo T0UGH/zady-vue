@@ -7,7 +7,7 @@ const getDefaultState = () => {
     token: undefined,
     name: '',
     avatar: '',
-    role: '',
+    roles: [],
     currentProjectId: undefined
   }
 }
@@ -27,8 +27,8 @@ const mutations = {
   SET_AVATAR: (state, avatar) => {
     state.avatar = avatar
   },
-  SET_ROLE: (state, role) => {
-    state.role = role
+  SET_ROLES: (state, roles) => {
+    state.roles = roles
   },
   SET_CURRENT_PROJECT_ID: (state, id) => {
     state.currentProjectId = id

@@ -55,6 +55,8 @@
 <script>
 import { validUsername } from '@/utils/validate'
 import { login } from '@/api/user'
+import router from '@/router'
+import { resetRouter } from '@/router'
 
 export default {
   name: 'Login',
@@ -115,7 +117,9 @@ export default {
             this.$store.commit('user/SET_TOKEN', body.token)
             this.$store.commit('user/SET_NAME', body.name)
             this.$store.commit('user/SET_AVATAR', body.avatar)
-            this.$store.commit('user/SET_ROLE', body.role.role)
+            const roleStr = body.role.role
+            const roleArr = roleStr.split(',')
+            this.$store.commit('user/SET_ROLES', roleArr)
             this.$store.commit('user/SET_CURRENT_PROJECT_ID', body.defaultProjectId)
           }).then(() => {
             console.log('here')

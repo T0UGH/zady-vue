@@ -40,6 +40,7 @@ import Hamburger from '@/components/Hamburger'
 import { resetRouter } from '@/router'
 import { getProjectsByUser } from '../../api/project'
 import { switchProject } from '../../api/user'
+import { generateRoutes } from '../../utils/roles'
 
 export default {
   components: {
@@ -84,6 +85,7 @@ export default {
     logout() {
       resetRouter()
       this.$store.commit('user/RESET_STATE')
+      this.$store.commit('permission/RESET_ROUTES')
       this.$router.push(`/login?redirect=${this.$route.fullPath}`)
     },
     handleCommand(projectId) {
@@ -91,11 +93,16 @@ export default {
       switchProject(projectId).then(res => {
         this.$store.commit('user/SET_CURRENT_PROJECT_ID', projectId)
         this.$store.commit('user/SET_TOKEN', res.body)
-        this.projectList.forEach(project => {
+        this.projectList.forEach(async project => {
           if (project.projectId === projectId) {
             this.currentProjectName = project.name
+            this.$store.commit('user/SET_ROLES', project.role.role.split(','))
           }
+          resetRouter()
+          this.$store.commit('permission/RESET_ROUTES')
+          await generateRoutes()
         })
+        this.$router.push(`/`)
       })
     }
   }
