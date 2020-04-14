@@ -68,7 +68,7 @@ import { getBacklogs, deleteBacklog, addToCurrentSprint, removeFromCurrentSprint
 import { mapGetters } from 'vuex'
 
 export default {
-  name: 'UnStartBacklog',
+  name: 'BacklogTable',
   data() {
     return {
       listLoading: false,

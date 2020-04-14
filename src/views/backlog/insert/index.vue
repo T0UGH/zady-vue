@@ -72,7 +72,7 @@ export default {
           this.disabledTag = true
           await insertBacklog(this.newBacklog)
           this.$message.success('新建成功')
-          this.$router.push('/backlog/unStartBacklog')
+          this.$router.push('/backlog/table')
         } else {
           return false
         }

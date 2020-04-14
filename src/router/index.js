@@ -116,14 +116,14 @@ export const asyncRoutes = [
   {
     path: '/backlog',
     component: Layout,
-    redirect: '/backlog/unStartBacklog',
+    redirect: '/backlog/table',
     name: '工作表管理',
     meta: { title: '工作表管理', icon: 'example' },
     children: [
       {
-        path: 'unStartBacklog',
+        path: 'table',
         name: '项目工作表',
-        component: () => import('@/views/backlog/unStartBacklog/index'),
+        component: () => import('@/views/backlog/table/index'),
         meta: { title: '项目工作表', icon: 'table' }
       },
       {
