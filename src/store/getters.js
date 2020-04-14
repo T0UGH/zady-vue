@@ -9,6 +9,8 @@ const getters = {
   currentProjectId: state => state.user.currentProjectId,
   currentProject: state => state.user.currentProject,
   projectList: state => state.user.projectList,
-  userId: state => state.user.userId
+  userId: state => state.user.userId,
+  backlogStatusEnum: state => state.constants.backlogStatusEnum,
+  backlogPriorityEnum: state => state.constants.backlogPriorityEnum
 }
 export default getters

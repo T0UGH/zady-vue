@@ -3,8 +3,8 @@
     <el-form v-if="currentProject" :model="currentProject" label-width="120px">
       <el-form-item>
         <el-button-group>
-          <el-button size="medium" :loading="loading" :disabled="!disableTag" @click="onEdit">编辑</el-button>
-          <el-button size="medium" :loading="loading" :disabled="disableTag" @click="onSubmit">提交</el-button>
+          <el-button v-permission="['master']" size="medium" :loading="loading" :disabled="!disableTag" @click="onEdit">编辑</el-button>
+          <el-button v-permission="['master']" size="medium" :loading="loading" :disabled="disableTag" @click="onSubmit">提交</el-button>
         </el-button-group>
       </el-form-item>
       <el-form-item label="项目ID">
@@ -26,11 +26,13 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { updateProject } from '../../../api/project'
+import { updateProject } from '@/api/project'
 import { Message } from 'element-ui'
+// import permission from '@/directive/permission/index.js' // 权限判断指令
 
 export default {
   name: 'UpdateProject',
+  // directives: { permission },
   data() {
     return {
       disableTag: true,

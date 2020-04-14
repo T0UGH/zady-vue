@@ -76,6 +76,21 @@ export const constantRoutes = [
       }
     ]
   },
+  {
+    path: '/backlog',
+    component: Layout,
+    redirect: '/backlog/unStartBacklog',
+    name: '工作表管理',
+    meta: { title: '工作表管理', icon: 'example' },
+    children: [
+      {
+        path: 'unStartBacklog',
+        name: '项目工作表',
+        component: () => import('@/views/backlog/unStartBacklog/index'),
+        meta: { title: '项目工作表', icon: 'form' }
+      }
+    ]
+  },
 
   {
     path: '/example',

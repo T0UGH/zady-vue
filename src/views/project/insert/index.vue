@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import { insertProject } from '../../../api/project'
+import { insertProject } from '@/api/project'
 import { Message } from 'element-ui'
 
 export default {

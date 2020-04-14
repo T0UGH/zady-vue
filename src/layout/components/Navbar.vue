@@ -17,7 +17,7 @@
             </el-dropdown-item>
           </router-link>
           <el-dropdown-item>
-            <el-dropdown @command="handleCommand">
+            <el-dropdown @command="onSwitch">
               <span>项目: {{ currentProject? currentProject.name: '' }}<i class="el-icon-caret-bottom"/></span>
               <el-dropdown-menu slot="dropdown">
                 <el-dropdown-item v-for="project in projectList" :command="project.projectId" :key="project.projectId">{{ project.name }}</el-dropdown-item>
@@ -38,7 +38,6 @@ import { mapGetters } from 'vuex'
 import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
 import { resetRouter } from '@/router'
-import { getProjectsByUser } from '../../api/project'
 import { switchProject } from '../../api/user'
 import { generateRoutes } from '../../utils/roles'
 
@@ -60,12 +59,6 @@ export default {
       'currentProjectId'
     ])
   },
-  beforeCreate: function() {
-    console.log(this)
-    const projectId = this.currentProjectId
-    console.log(projectId)
-    // todo: 这里实现的是直接跳转到创建一个项目的界面
-  },
   methods: {
     toggleSideBar() {
       this.$store.dispatch('app/toggleSideBar')
@@ -76,7 +69,7 @@ export default {
       this.$store.commit('permission/RESET_ROUTES')
       this.$router.push(`/login?redirect=${this.$route.fullPath}`)
     },
-    handleCommand: async function(projectId) {
+    onSwitch: async function(projectId) {
       try {
         const res = await switchProject(projectId)
         console.log(res)
