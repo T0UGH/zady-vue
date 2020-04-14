@@ -5,6 +5,7 @@ import getPageTitle from '@/utils/get-page-title'
 import store from './store'
 import { Message } from 'element-ui'
 import { generateRoutes } from './utils/roles'
+import { resetRouter } from '@/router'
 
 NProgress.configure({ showSpinner: false }) // NProgress Configuration
 
@@ -30,6 +31,8 @@ router.beforeEach(async(to, from, next) => {
     }
     window.addEventListener('beforeunload', () => {
       console.log('exit')
+      resetRouter()
+      store.commit('permission/RESET_ROUTES')
       sessionStorage.setItem('store', JSON.stringify(store.state))
     })
   }

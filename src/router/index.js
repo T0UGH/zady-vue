@@ -77,22 +77,6 @@ export const constantRoutes = [
     ]
   },
   {
-    path: '/backlog',
-    component: Layout,
-    redirect: '/backlog/unStartBacklog',
-    name: '工作表管理',
-    meta: { title: '工作表管理', icon: 'example' },
-    children: [
-      {
-        path: 'unStartBacklog',
-        name: '项目工作表',
-        component: () => import('@/views/backlog/unStartBacklog/index'),
-        meta: { title: '项目工作表', icon: 'form' }
-      }
-    ]
-  },
-
-  {
     path: '/example',
     component: Layout,
     redirect: '/example/table',
@@ -129,6 +113,35 @@ export const constantRoutes = [
 ]
 
 export const asyncRoutes = [
+  {
+    path: '/backlog',
+    component: Layout,
+    redirect: '/backlog/unStartBacklog',
+    name: '工作表管理',
+    meta: { title: '工作表管理', icon: 'example' },
+    children: [
+      {
+        path: 'unStartBacklog',
+        name: '项目工作表',
+        component: () => import('@/views/backlog/unStartBacklog/index'),
+        meta: { title: '项目工作表', icon: 'table' }
+      },
+      {
+        path: 'insert',
+        name: '新建工作',
+        hidden: true,
+        component: () => import('@/views/backlog/insert/index'),
+        meta: { title: '新建工作', icon: 'form', roles: ['master', 'owner'] }
+      },
+      {
+        path: 'update/:backlogId',
+        name: '查看工作',
+        hidden: true,
+        component: () => import('@/views/backlog/update/index'),
+        meta: { title: '查看工作', icon: 'form' }
+      }
+    ]
+  },
   {
     path: '/nested',
     component: Layout,

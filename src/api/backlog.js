@@ -12,6 +12,13 @@ export function getBacklogs(projectId, sprintId, statusStr) {
   })
 }
 
+export function getBacklog(backlogId) {
+  return request({
+    url: '/backlog/' + backlogId,
+    method: 'get'
+  })
+}
+
 export function deleteBacklog(backlogId) {
   return request({
     url: '/backlog/' + backlogId,
@@ -19,10 +26,32 @@ export function deleteBacklog(backlogId) {
   })
 }
 
-export function insertProject(backlog) {
+export function insertBacklog(backlog) {
   return request({
     url: '/backlog',
     method: 'post',
     data: backlog
+  })
+}
+
+export function updateBacklog(backlog) {
+  return request({
+    url: '/backlog',
+    method: 'put',
+    data: backlog
+  })
+}
+
+export function addToCurrentSprint(backlogId) {
+  return request({
+    url: '/currentBacklog/' + backlogId,
+    method: 'post'
+  })
+}
+
+export function removeFromCurrentSprint(backlogId) {
+  return request({
+    url: '/currentBacklog/' + backlogId,
+    method: 'delete'
   })
 }

@@ -6,7 +6,7 @@
           <el-button size="medium" :loading="loading" @click="onSubmit">提交</el-button>
         </el-button-group>
       </el-form-item>
-      <el-form-item label="项目名称" :roles="[{required: true, message: '项目名称不能为空'}]">
+      <el-form-item label="项目名称" :rules="[{required: true, message: '项目名称不能为空'}]">
         <el-input v-model="newProject.name" />
       </el-form-item>
       <el-form-item label="项目描述">

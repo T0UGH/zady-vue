@@ -28,6 +28,7 @@
         <el-button-group>
           <el-button v-permission="['master', 'owner']" @click="onClickInsert">新增</el-button>
           <el-button v-permission="['master', 'owner']" @click="onClickImport">导入</el-button>
+          <el-button v-permission="['master', 'owner']" @click="onClickExport">导出</el-button>
           <el-button @click="onClickDetail">详情</el-button>
           <el-button v-permission="['master', 'owner']" @click="onClickDelete">删除</el-button>
           <el-button @click="onClickCancel">不选</el-button>
@@ -63,7 +64,7 @@
 </template>
 
 <script>
-import { getBacklogs, deleteBacklog } from '@/api/backlog'
+import { getBacklogs, deleteBacklog, addToCurrentSprint, removeFromCurrentSprint } from '@/api/backlog'
 import { mapGetters } from 'vuex'
 
 export default {
@@ -72,7 +73,7 @@ export default {
     return {
       listLoading: false,
       search: '',
-      pageSize: 10,
+      pageSize: 4,
       currentPage: 1,
       currentRow: null,
       currentStatus: '',
@@ -102,29 +103,76 @@ export default {
       console.log(this.currentRow)
     },
     onClickInsert() {
-      this.$message.info('新增按钮被点击了')
+      this.$router.push('/backlog/insert')
     },
     async onClickDelete() {
-      this.listLoading = true
-      try {
-        await deleteBacklog(this.currentRow.backlogId)
-        this.$message.success('删除成功')
-        await this.getTableData()
-      } catch (e) {
-        console.log(e)
-      } finally {
-        this.listLoading = false
+      if (this.currentRow) {
+        if (this.currentRow.status === '未开始') {
+          try {
+            this.listLoading = true
+            await deleteBacklog(this.currentRow.backlogId)
+            this.$message.success('删除成功')
+            await this.getTableData()
+          } catch (e) {
+            console.log(e)
+          } finally {
+            this.listLoading = false
+          }
+        } else {
+          this.$message.error('当前工作不是未开始状态，无法删除')
+        }
+      } else {
+        this.$message.error('请先选择一个工作')
       }
     },
-    onClickImport() {
-      this.$message.info('导入按钮被点击了')
+    async onClickImport() {
+      if (this.currentRow) {
+        if (this.currentRow.status === '未开始') {
+          try {
+            this.listLoading = true
+            await addToCurrentSprint(this.currentRow.backlogId)
+            this.$message.success('导入成功')
+            await this.getTableData()
+          } catch (e) {
+            console.log(e)
+          } finally {
+            this.listLoading = false
+          }
+        } else {
+          this.$message.error('当前工作不是未开始状态，无法导入当前迭代')
+        }
+      } else {
+        this.$message.error('请先选择一个工作')
+      }
+    },
+    async onClickExport() {
+      if (this.currentRow) {
+        if (this.currentRow.status === '进行中') {
+          try {
+            this.listLoading = true
+            await removeFromCurrentSprint(this.currentRow.backlogId)
+            this.$message.success('导出成功')
+            await this.getTableData()
+          } catch (e) {
+            console.log(e)
+          } finally {
+            this.listLoading = false
+          }
+        } else {
+          this.$message.error('当前工作不是进行中状态，无法从当前迭代导出')
+        }
+      } else {
+        this.$message.error('请先选择一个工作')
+      }
     },
     onClickDetail() {
-      this.$message.info('详情按钮被点击了')
+      if (this.currentRow) {
+        this.$router.push('/backlog/update/' + this.currentRow.backlogId)
+      } else {
+        this.$message.error('请先选择一个工作')
+      }
     },
     onClickCancel() {
-      this.$message.info('不选按钮被点击了')
-      // 清空选择
       this.$refs.table.setCurrentRow()
     },
     async getTableData() {
