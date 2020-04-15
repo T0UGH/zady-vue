@@ -56,9 +56,9 @@ export const constantRoutes = [
   },
 
   {
-    path: '/project',
+    path: '/projectTable',
     component: Layout,
-    redirect: '/project/update',
+    redirect: '/projectTable/update',
     name: '项目管理',
     meta: { title: '项目管理', icon: 'example' },
     children: [
@@ -73,6 +73,42 @@ export const constantRoutes = [
         name: '新建项目',
         component: () => import('@/views/project/insert/index'),
         meta: { title: '新建项目', icon: 'form' }
+      }
+    ]
+  },
+  {
+    path: '/user',
+    component: Layout,
+    redirect: '/user/info',
+    name: '个人管理',
+    meta: { title: '个人管理', icon: 'user' },
+    children: [
+      {
+        path: 'info',
+        name: '个人信息',
+        component: () => import('@/views/user/info/index'),
+        meta: { title: '个人信息', icon: 'user' }
+      },
+      {
+        path: 'avatar',
+        name: '修改头像',
+        hidden: true,
+        component: () => import('@/views/user/avatar/index'),
+        meta: { title: '修改头像', icon: 'user' }
+      },
+      {
+        path: 'project',
+        name: '项目列表',
+        hidden: true,
+        component: () => import('@/views/user/projectTable/index'),
+        meta: { title: '项目列表', icon: 'table' }
+      },
+      {
+        path: 'invite',
+        name: '邀请列表',
+        hidden: true,
+        component: () => import('@/views/user/inviteTable/index'),
+        meta: { title: '邀请列表', icon: 'table' }
       }
     ]
   }

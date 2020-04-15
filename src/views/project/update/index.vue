@@ -28,11 +28,9 @@
 import { mapGetters } from 'vuex'
 import { updateProject } from '@/api/project'
 import { Message } from 'element-ui'
-// import permission from '@/directive/permission/index.js' // 权限判断指令
 
 export default {
   name: 'UpdateProject',
-  // directives: { permission },
   data() {
     return {
       disableTag: true,

@@ -49,59 +49,6 @@ const mutations = {
 }
 
 const actions = {
-  // user login
-  // login({ commit }, userInfo) {
-  //   const { email, password } = userInfo
-  //   return new Promise((resolve, reject) => {
-  //     login({ email: email.trim(), password: password }).then(response => {
-  //       const { body } = response
-  //       commit('SET_TOKEN', body.token)
-  //       commit('SET_NAME', body.name)
-  //       commit('SET_AVATAR', body.avatar)
-  //       commit('SET_ROLE', body.role.role)
-  //       setToken(body.token)
-  //       resolve()
-  //     }).catch(error => {
-  //       console.log(error)
-  //       reject(error)
-  //     })
-  //   })
-  // },
-
-  // get user info
-  // getInfo({ commit, state }) {
-  //   return new Promise((resolve, reject) => {
-  //     getInfo(state.token).then(response => {
-  //       const { data } = response
-  //
-  //       if (!data) {
-  //         reject('Verification failed, please Login again.')
-  //       }
-  //
-  //       const { name, avatar } = data
-  //
-  //       commit('SET_NAME', name)
-  //       commit('SET_AVATAR', avatar)
-  //       resolve(data)
-  //     }).catch(error => {
-  //       reject(error)
-  //     })
-  //   })
-  // },
-
-  // user logout
-  logout({ commit, state }) {
-    return new Promise((resolve, reject) => {
-      logout(state.token).then(() => {
-        removeToken() // must remove  token  first
-        resetRouter()
-        commit('RESET_STATE')
-        resolve()
-      }).catch(error => {
-        reject(error)
-      })
-    })
-  },
   getProjectsByUser({ commit, state }) {
     return new Promise((resolve, reject) => {
       getProjectsByUser(state.userId).then(res => {

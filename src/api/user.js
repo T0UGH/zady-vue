@@ -14,3 +14,32 @@ export function switchProject(projectId) {
     method: 'put'
   })
 }
+
+export function getUser(userId) {
+  return request({
+    url: '/user/' + userId,
+    method: 'get'
+  })
+}
+
+export function updateUser(user) {
+  return request({
+    url: '/user',
+    method: 'put',
+    data: user
+  })
+}
+
+export function getInviteProjectsByUser(userId) {
+  return request({
+    url: '/user/invites/' + userId,
+    method: 'get'
+  })
+}
+
+export function acceptInvite(projectId) {
+  return request({
+    url: '/invite/' + projectId,
+    method: 'put'
+  })
+}

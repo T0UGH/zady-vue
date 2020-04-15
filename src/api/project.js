@@ -9,14 +9,14 @@ export function getProjectsByUser(userId) {
 
 export function getProjectById(projectId) {
   return request({
-    url: '/project/' + projectId,
+    url: '/projectTable/' + projectId,
     method: 'get'
   })
 }
 
 export function updateProject(project) {
   return request({
-    url: '/project',
+    url: '/projectTable',
     method: 'put',
     data: project
   })
@@ -24,7 +24,7 @@ export function updateProject(project) {
 
 export function insertProject(project) {
   return request({
-    url: '/project',
+    url: '/projectTable',
     method: 'post',
     data: project
   })
