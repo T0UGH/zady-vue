@@ -44,7 +44,7 @@ export default {
       search: '',
       pageSize: 10,
       currentPage: 1,
-      currentRow: null,
+      formData: null,
       tableData: []
     }
   },
@@ -64,13 +64,13 @@ export default {
   methods: {
     handleCurrentChange(val) {
       this.currentRow = val
-      console.log(this.currentRow)
+      console.log(this.formData)
     },
     async onReceiveInvite() {
-      if (this.currentRow) {
+      if (this.formData) {
         try {
           this.listLoading = true
-          await acceptInvite(this.currentRow.projectId)
+          await acceptInvite(this.formData.projectId)
           this.$message.success('接受邀请成功')
           await this.getTableData()
         } catch (e) {

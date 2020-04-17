@@ -169,10 +169,10 @@ export const asyncRoutes = [
         meta: { title: '查看工作', icon: 'form' }
       },
       {
-        path: 'table2',
-        name: '项目工作表2',
-        component: () => import('@/views/backlog/table2/index'),
-        meta: { title: '项目工作表2', icon: 'table' }
+        path: 'table3',
+        name: '项目工作表3',
+        component: () => import('@/views/backlog/table3/index'),
+        meta: { title: '项目工作表3', icon: 'table' }
       }
     ]
   },

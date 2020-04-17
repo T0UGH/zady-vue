@@ -8,7 +8,6 @@ export default {
   props: {
     size: String,
     submitData: {
-      type: Object,
       required: true
     },
     request: {
@@ -31,19 +30,21 @@ export default {
   },
   methods: {
     async onSubmit() {
-      this.$message.info('点击了提交')
-      // todo: 如何嵌入验证逻辑
       try {
         let valid = true
         for (let i = 0; i < this.validates.length; i++) {
           const currFun = this.validates[i]
-          valid = await currFun()
+          if (typeof (currFun) === 'boolean') {
+            valid = currFun
+          } else {
+            valid = await currFun()
+          }
         }
 
         if (valid) {
           await this.request(this.submitData)
-          this.$message.success('提交成功')
           await this.afterSubmit()
+          this.$message.success('提交成功')
         } else {
           this.$message.warning('提交失败')
         }

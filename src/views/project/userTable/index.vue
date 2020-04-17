@@ -46,7 +46,7 @@ export default {
       search: '',
       pageSize: 10,
       currentPage: 1,
-      currentRow: null,
+      formData: null,
       tableData: []
     }
   },
@@ -66,24 +66,24 @@ export default {
   methods: {
     handleCurrentChange(val) {
       this.currentRow = val
-      console.log(this.currentRow)
+      console.log(this.formData)
     },
     onReturn() {
       this.$router.go(-1)
     },
     onUserDetail() {
-      if (this.currentRow && this.currentRow.userId) {
-        this.$router.push('/project/userDetail/' + this.currentRow.userId)
+      if (this.formData && this.formData.userId) {
+        this.$router.push('/project/userDetail/' + this.formData.userId)
       } else {
         this.$message.error('请先选定一个用户')
       }
     },
     async onDelete() {
-      if (this.currentRow) {
+      if (this.formData) {
         try {
           this.listLoading = true
           const projectId = this.currentProjectId
-          const userId = this.currentRow.userId
+          const userId = this.formData.userId
           await deleteUserFromProject(projectId, userId)
           this.$message.success('删除成功')
           await this.getTableData()

@@ -72,7 +72,7 @@ export default {
       search: '',
       pageSize: 10,
       currentPage: 1,
-      currentRow: null,
+      formData: null,
       tableData: [],
       checkList: ['developer', 'tester']
     }
@@ -89,14 +89,14 @@ export default {
   methods: {
     handleCurrentChange(val) {
       this.currentRow = val
-      console.log(this.currentRow)
+      console.log(this.formData)
     },
     async onInvite() {
-      if (this.currentRow && this.currentRow.userId) {
+      if (this.formData && this.formData.userId) {
         try {
           this.listLoading = true
           const projectId = this.currentProjectId
-          const userId = this.currentRow.userId
+          const userId = this.formData.userId
           const roleStr = convertArrtoStr(this.checkList)
           await inviteUser(projectId, userId, roleStr)
           this.$message.success('邀请成功')

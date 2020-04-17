@@ -75,7 +75,7 @@ export default {
       search: '',
       pageSize: 4,
       currentPage: 1,
-      currentRow: null,
+      formData: null,
       currentStatus: '',
       currentPriority: '',
       tableData: []
@@ -100,17 +100,17 @@ export default {
   methods: {
     handleCurrentChange(val) {
       this.currentRow = val
-      console.log(this.currentRow)
+      console.log(this.formData)
     },
     onClickInsert() {
       this.$router.push('/backlog/insert')
     },
     async onClickDelete() {
-      if (this.currentRow) {
-        if (this.currentRow.status === '未开始') {
+      if (this.formData) {
+        if (this.formData.status === '未开始') {
           try {
             this.listLoading = true
-            await deleteBacklog(this.currentRow.backlogId)
+            await deleteBacklog(this.formData.backlogId)
             this.$message.success('删除成功')
             await this.getTableData()
           } catch (e) {
@@ -126,11 +126,11 @@ export default {
       }
     },
     async onClickImport() {
-      if (this.currentRow) {
-        if (this.currentRow.status === '未开始') {
+      if (this.formData) {
+        if (this.formData.status === '未开始') {
           try {
             this.listLoading = true
-            await addToCurrentSprint(this.currentRow.backlogId)
+            await addToCurrentSprint(this.formData.backlogId)
             this.$message.success('导入成功')
             await this.getTableData()
           } catch (e) {
@@ -146,11 +146,11 @@ export default {
       }
     },
     async onClickExport() {
-      if (this.currentRow) {
-        if (this.currentRow.status === '进行中') {
+      if (this.formData) {
+        if (this.formData.status === '进行中') {
           try {
             this.listLoading = true
-            await removeFromCurrentSprint(this.currentRow.backlogId)
+            await removeFromCurrentSprint(this.formData.backlogId)
             this.$message.success('导出成功')
             await this.getTableData()
           } catch (e) {
@@ -166,8 +166,8 @@ export default {
       }
     },
     onClickDetail() {
-      if (this.currentRow) {
-        this.$router.push('/backlog/update/' + this.currentRow.backlogId)
+      if (this.formData) {
+        this.$router.push('/backlog/update/' + this.formData.backlogId)
       } else {
         this.$message.error('请先选择一个工作')
       }
