@@ -15,14 +15,14 @@
         </el-select>
       </el-form-item>
       <el-form-item>
-      <el-select v-model="currentPriority" clearable placeholder="按优先级筛选">
-        <el-option
-          v-for="item in backlogPriorityEnum"
-          :key="item"
-          :label="item"
-          :value="item">
-        </el-option>
-      </el-select>
+        <el-select v-model="currentPriority" clearable placeholder="按优先级筛选">
+          <el-option
+            v-for="item in backlogPriorityEnum"
+            :key="item"
+            :label="item"
+            :value="item">
+          </el-option>
+        </el-select>
       </el-form-item>
       <el-form-item>
         <el-button-group>

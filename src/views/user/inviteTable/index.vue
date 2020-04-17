@@ -37,7 +37,7 @@ import { getInviteProjectsByUser, acceptInvite } from '@/api/user'
 import { mapGetters } from 'vuex'
 
 export default {
-  name: 'InviteTable',
+  name: 'UserInviteTable',
   data() {
     return {
       listLoading: false,

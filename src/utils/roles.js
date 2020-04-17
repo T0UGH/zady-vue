@@ -10,3 +10,14 @@ export async function generateRoutes() {
   // // dynamically add accessible routes
   router.addRoutes(accessRoutes)
 }
+
+export function convertArrtoStr(roleArr) {
+  let result = ''
+  for (let i = 0; i < roleArr.length; i++) {
+    result += roleArr[i]
+    if (i !== roleArr.length - 1) {
+      result += ','
+    }
+  }
+  return result
+}

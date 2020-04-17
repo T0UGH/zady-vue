@@ -11,6 +11,7 @@ const getters = {
   projectList: state => state.user.projectList,
   userId: state => state.user.userId,
   backlogStatusEnum: state => state.constants.backlogStatusEnum,
-  backlogPriorityEnum: state => state.constants.backlogPriorityEnum
+  backlogPriorityEnum: state => state.constants.backlogPriorityEnum,
+  rolesEnum: state => state.constants.rolesEnum
 }
 export default getters

@@ -117,6 +117,9 @@ export default {
       try {
         this.loading = true
         const res = await getUser(this.userId)
+        if (res.body.password) {
+          res.body.password = null
+        }
         this.user = res.body
       } catch (e) {
         console.log(e)

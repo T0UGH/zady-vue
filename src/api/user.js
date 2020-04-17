@@ -43,3 +43,14 @@ export function acceptInvite(projectId) {
     method: 'put'
   })
 }
+
+export function getUsersForInvite(search, projectId) {
+  return request({
+    url: '/usersForInvite',
+    method: 'get',
+    params: {
+      queryStr: search,
+      projectId: projectId
+    }
+  })
+}

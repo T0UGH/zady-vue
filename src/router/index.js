@@ -56,9 +56,9 @@ export const constantRoutes = [
   },
 
   {
-    path: '/projectTable',
+    path: '/project',
     component: Layout,
-    redirect: '/projectTable/update',
+    redirect: '/project/update',
     name: '项目管理',
     meta: { title: '项目管理', icon: 'example' },
     children: [
@@ -73,6 +73,32 @@ export const constantRoutes = [
         name: '新建项目',
         component: () => import('@/views/project/insert/index'),
         meta: { title: '新建项目', icon: 'form' }
+      },
+      {
+        path: 'invite',
+        name: '邀请列表',
+        component: () => import('@/views/project/inviteTable/index'),
+        meta: { title: '邀请列表', icon: 'peoples' }
+      },
+      {
+        path: 'user',
+        name: '用户列表',
+        component: () => import('@/views/project/userTable/index'),
+        meta: { title: '用户列表', icon: 'peoples' }
+      },
+      {
+        path: 'inviteUser',
+        name: '邀请用户',
+        hidden: true,
+        component: () => import('@/views/project/inviteUserForm/index'),
+        meta: { title: '邀请用户', icon: 'peoples' }
+      },
+      {
+        path: 'userDetail/:userId',
+        name: '用户详情',
+        hidden: true,
+        component: () => import('@/views/project/userDetail/index'),
+        meta: { title: '用户详情', icon: 'people' }
       }
     ]
   },
@@ -141,6 +167,12 @@ export const asyncRoutes = [
         hidden: true,
         component: () => import('@/views/backlog/update/index'),
         meta: { title: '查看工作', icon: 'form' }
+      },
+      {
+        path: 'table2',
+        name: '项目工作表2',
+        component: () => import('@/views/backlog/table2/index'),
+        meta: { title: '项目工作表2', icon: 'table' }
       }
     ]
   },

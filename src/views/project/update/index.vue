@@ -5,6 +5,8 @@
         <el-button-group>
           <el-button v-permission="['master']" size="medium" :loading="loading" :disabled="!disableTag" @click="onEdit">编辑</el-button>
           <el-button v-permission="['master']" size="medium" :loading="loading" :disabled="disableTag" @click="onSubmit">提交</el-button>
+          <el-button v-permission="['master']" size="medium" :loading="loading" @click="onUserTable">成员列表</el-button>
+          <el-button v-permission="['master']" size="medium" :loading="loading" @click="onInviteTable">邀请列表</el-button>
         </el-button-group>
       </el-form-item>
       <el-form-item label="项目ID">
@@ -43,6 +45,12 @@ export default {
     ])
   },
   methods: {
+    onUserTable() {
+      this.$router.push('/project/user')
+    },
+    onInviteTable() {
+      this.$router.push('/project/invite')
+    },
     onEdit() {
       this.disableTag = false
     },
