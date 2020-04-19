@@ -1,4 +1,5 @@
 import request from '@/utils/request'
+import { convertArrtoStr } from '@/utils/roles'
 
 export function getProjectsByUser(userId) {
   return request({
@@ -37,14 +38,14 @@ export function getInviteUsersByProject(projectId) {
   })
 }
 
-export function inviteUser(projectId, userId, roleStr) {
+export function inviteUser(projectId, userId, role) {
   return request({
     url: '/role',
     method: 'post',
     params: {
       projectId: projectId,
       userId: userId,
-      role: roleStr
+      role: convertArrtoStr(role)
     }
   })
 }
@@ -60,14 +61,14 @@ export function deleteUserFromProject(projectId, userId) {
   })
 }
 
-export function updateRole(projectId, userId, roleStr) {
+export function updateRole({ projectId, userId, roleList }) {
   return request({
     url: '/role',
-    method: '/put',
+    method: 'put',
     params: {
       projectId: projectId,
       userId: userId,
-      role: roleStr
+      role: convertArrtoStr(roleList)
     }
   })
 }

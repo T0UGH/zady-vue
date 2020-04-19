@@ -2,6 +2,7 @@
   <common-form
     no-load
     :submit-request="insertProject"
+    :after-success="afterSuccess"
   >
     <template #formContent="{formData}">
       <el-form-item label="项目名称" prop="name" :rules="[{required: true, message: '项目名称不能为空'}]">
@@ -27,7 +28,10 @@ export default {
     CommonForm
   },
   methods: {
-    insertProject
+    insertProject,
+    async afterSuccess() {
+      await this.$store.dispatch('user/getProjectsByUser')
+    }
   }
 }
 </script>

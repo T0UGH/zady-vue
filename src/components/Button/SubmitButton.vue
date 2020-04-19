@@ -8,6 +8,7 @@ export default {
   props: {
     size: String,
     submitData: {
+      type: Array,
       required: true
     },
     request: {
@@ -45,7 +46,7 @@ export default {
         }
 
         if (valid) {
-          await this.request(this.submitData)
+          await this.request(...this.submitData)
           await this.afterSubmit()
           this.$message.success('提交成功')
         } else {

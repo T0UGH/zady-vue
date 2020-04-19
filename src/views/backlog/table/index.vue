@@ -5,13 +5,13 @@
     :update-request="updateBacklog"
     :additional-form-data="additionalData"
     :delete-request="deleteBacklog"
-    primary-key="backlogId"
+    :primary-keys="['backlogId']"
   >
     <template #buttonSlot="{formData}">
       <submit-button
         size="small"
         :request="addToCurrentSprint"
-        :submit-data="formData.backlogId"
+        :submit-data="[formData.backlogId]"
         :after-submit="afterSubmit"
         :validates="[validateImport(formData)]"
       >
@@ -20,7 +20,7 @@
       <submit-button
         size="small"
         :request="removeFromCurrentSprint"
-        :submit-data="formData.backlogId"
+        :submit-data="[formData.backlogId]"
         :after-submit="afterSubmit"
         :validates="[validateExport(formData)]"
       >

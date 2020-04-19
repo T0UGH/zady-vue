@@ -7,7 +7,7 @@
           size="small"
           :request="submitRequest"
           :validates="[validateForm]"
-          :submit-data="formData"
+          :submit-data="[formData]"
           :after-submit="afterSuccess"
         >
           提交

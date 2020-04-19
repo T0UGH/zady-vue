@@ -13,10 +13,9 @@
           <submit-button
             v-if="!noDelete"
             size="small"
-            :validates="[validateDelete]"
             :after-submit="afterSubmit"
             :request="deleteRequest"
-            :submit-data="formData[primaryKey]"
+            :submit-data="primaryData"
           >
             删除
           </submit-button>
@@ -26,7 +25,7 @@
             :validates="[validateForm]"
             :after-submit="afterSubmit"
             :request="submitRequest"
-            :submit-data="allFormData()"
+            :submit-data="[allFormData]"
           >
             提交
           </submit-button>
@@ -44,7 +43,7 @@
       </el-col>
       <el-col :span="12">
         <el-form ref="form" size="small" :model="formData" label-width="120px">
-          <slot name="formContent" :formData="formData"/>
+          <slot name="formContent" :formData="formData" :allFormData="allFormData"/>
         </el-form>
       </el-col>
     </el-card>
@@ -80,8 +79,8 @@ export default {
       type: Function,
       default: function() {}
     },
-    primaryKey: {
-      type: String,
+    primaryKeys: {
+      type: Array,
       required: true
     }, // 用什么做参数来删除
     noInsert: {
@@ -120,20 +119,12 @@ export default {
     },
     submitRequest() {
       if (!this.noInsert && !this.noUpdate) {
-        return this.formData[this.primaryKey] ? this.updateRequest : this.insertRequest
+        return this.formData[this.primaryKeys[0]] ? this.updateRequest : this.insertRequest
       } else if (this.noInsert && !this.noUpdate) {
         return this.updateRequest
       } else {
         return function() {}
       }
-    }
-  },
-  created() {
-    this.loadTableData()
-  },
-  methods: {
-    onClickCancel() {
-      this.afterSubmit()
     },
     allFormData() {
       const allFormData = {}
@@ -147,6 +138,21 @@ export default {
       }
       return allFormData
     },
+    primaryData() {
+      const primaryData = []
+      for (let i = 0; i < this.primaryKeys.length; i++) {
+        primaryData[i] = this.allFormData[this.primaryKeys[i]]
+      }
+      return primaryData
+    }
+  },
+  created() {
+    this.loadTableData()
+  },
+  methods: {
+    onClickCancel() {
+      this.afterSubmit()
+    },
     onClickInsert() {
       this.$refs.table.setCurrentRow()
       this.formData = this.newFormData()
@@ -156,9 +162,6 @@ export default {
     },
     validateForm() {
       return this.$refs.form.validate()
-    },
-    validateDelete() {
-      return !!(this.formData && this.formData.status === '未开始')
     },
     onCurrentChange(val) {
       if (val) {
