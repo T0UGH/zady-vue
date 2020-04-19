@@ -153,26 +153,6 @@ export const asyncRoutes = [
         name: '项目工作表',
         component: () => import('@/views/backlog/table/index'),
         meta: { title: '项目工作表', icon: 'table' }
-      },
-      {
-        path: 'insert',
-        name: '新建工作',
-        hidden: true,
-        component: () => import('@/views/backlog/insert/index'),
-        meta: { title: '新建工作', icon: 'form', roles: ['master', 'owner'] }
-      },
-      {
-        path: 'update/:backlogId',
-        name: '查看工作',
-        hidden: true,
-        component: () => import('@/views/backlog/update/index'),
-        meta: { title: '查看工作', icon: 'form' }
-      },
-      {
-        path: 'table3',
-        name: '项目工作表3',
-        component: () => import('@/views/backlog/table3/index'),
-        meta: { title: '项目工作表3', icon: 'table' }
       }
     ]
   },

@@ -172,7 +172,7 @@ export default {
     },
     async afterSubmit() {
       await this.loadTableData()
-      this.formData = this.newFormData()
+      // this.formData = this.newFormData()
     },
     async loadTableData() {
       this.loading = true

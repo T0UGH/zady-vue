@@ -1,41 +1,33 @@
 <template>
-  <div class="app-container">
-    <el-form :inline="true" class="demo-form-inline">
-      <el-form-item>
-        <el-input v-model="search" prefix-icon="el-icon-search" placeholder="输入关键字搜索" />
-      </el-form-item>
-      <el-form-item>
-        <el-select v-model="currentStatus" clearable placeholder="按状态筛选">
-          <el-option
-            v-for="item in backlogStatusEnum"
-            :key="item"
-            :label="item"
-            :value="item">
-          </el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item>
-        <el-select v-model="currentPriority" clearable placeholder="按优先级筛选">
-          <el-option
-            v-for="item in backlogPriorityEnum"
-            :key="item"
-            :label="item"
-            :value="item">
-          </el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item>
-        <el-button-group>
-          <el-button v-permission="['master', 'owner']" @click="onClickInsert">新增</el-button>
-          <el-button v-permission="['master', 'owner']" @click="onClickImport">导入</el-button>
-          <el-button v-permission="['master', 'owner']" @click="onClickExport">导出</el-button>
-          <el-button @click="onClickDetail">详情</el-button>
-          <el-button v-permission="['master', 'owner']" @click="onClickDelete">删除</el-button>
-          <el-button @click="onClickCancel">不选</el-button>
-        </el-button-group>
-      </el-form-item>
-    </el-form>
-    <el-table ref="table" :data="filteredData" highlight-current-row @current-change="handleCurrentChange" v-loading="listLoading">
+  <common-table
+    :load-request="loadRequest"
+    :insert-request="insertBacklog"
+    :update-request="updateBacklog"
+    :additional-form-data="additionalData"
+    :delete-request="deleteBacklog"
+    primary-key="backlogId"
+  >
+    <template #buttonSlot="{formData}">
+      <submit-button
+        size="small"
+        :request="addToCurrentSprint"
+        :submit-data="formData.backlogId"
+        :after-submit="afterSubmit"
+        :validates="[validateImport(formData)]"
+      >
+        导入
+      </submit-button>
+      <submit-button
+        size="small"
+        :request="removeFromCurrentSprint"
+        :submit-data="formData.backlogId"
+        :after-submit="afterSubmit"
+        :validates="[validateExport(formData)]"
+      >
+        导出
+      </submit-button>
+    </template>
+    <template slot="tableContent">
       <el-table-column
         prop="backlogId"
         label="编号"
@@ -54,137 +46,79 @@
         prop="status"
         label="状态"
       />
-      <el-table-column
-        prop="sprintId"
-        label="所属迭代"
-      />
-    </el-table>
-    <el-pagination layout="prev, pager, next" :total="tableData.length" :page-size="pageSize" :current-page.sync="currentPage" />
-  </div>
+    </template>
+    <template #formContent="{formData}">
+      <el-form-item label="工作ID" prop="backlogId">
+        <el-input v-model="formData.backlogId" disabled />
+      </el-form-item>
+      <el-form-item label="工作名称" prop="name" :rules="[{required: true, message: '工作名称不能为空', trigger: 'blur'}]">
+        <el-input v-model="formData.name" />
+      </el-form-item>
+      <el-form-item label="工作描述" prop="note">
+        <el-input v-model="formData.note" />
+      </el-form-item>
+      <el-form-item label="优先级" prop="priority" :rules="[{required: true, message: '优先级不能为空', trigger: 'blur'}]">
+        <el-select v-model="formData.priority" placeholder="请选择">
+          <el-option
+            v-for="item in backlogPriorityEnum"
+            :key="item"
+            :label="item"
+            :value="item"
+          />
+        </el-select>
+      </el-form-item>
+      <el-form-item label="当前状态" prop="status">
+        <el-input v-model="formData.status" disabled />
+      </el-form-item>
+      <el-form-item label="所属迭代" prop="sprintId">
+        <el-input v-model="formData.sprintId" disabled/>
+      </el-form-item>
+    </template>
+  </common-table>
 </template>
 
 <script>
-import { getBacklogs, deleteBacklog, addToCurrentSprint, removeFromCurrentSprint } from '@/api/backlog'
+import CommonTable from '@/components/CommonTable'
 import { mapGetters } from 'vuex'
-
+import { getBacklogs, insertBacklog, updateBacklog, deleteBacklog, addToCurrentSprint, removeFromCurrentSprint } from '@/api/backlog'
+import SubmitButton from '@/components/Button/SubmitButton'
 export default {
-  name: 'BacklogTable',
+  name: 'Table3',
+  components: {
+    SubmitButton,
+    CommonTable
+  },
   data() {
     return {
-      listLoading: false,
-      search: '',
-      pageSize: 4,
-      currentPage: 1,
-      formData: null,
-      currentStatus: '',
-      currentPriority: '',
-      tableData: []
+      additionalData: {
+        projectId: this.$store.getters.currentProjectId
+      }
     }
   },
   computed: {
     ...mapGetters([
-      'backlogStatusEnum',
       'backlogPriorityEnum'
-    ]),
-    filteredData() {
-      return this.tableData
-        .filter(data => !this.search || data.name.includes(this.search))
-        .filter(data => !this.currentStatus || data.status === this.currentStatus)
-        .filter(data => !this.currentPriority || data.priority === this.currentPriority)
-        .slice((this.currentPage - 1) * this.pageSize, this.currentPage * this.pageSize)
-    }
-  },
-  created() {
-    this.getTableData()
+    ])
   },
   methods: {
-    handleCurrentChange(val) {
-      this.currentRow = val
-      console.log(this.formData)
+    loadRequest() {
+      return getBacklogs(this.$store.getters.currentProjectId)
     },
-    onClickInsert() {
-      this.$router.push('/backlog/insert')
+    insertBacklog,
+    updateBacklog,
+    deleteBacklog,
+    addToCurrentSprint,
+    removeFromCurrentSprint,
+    validateImport(formData) {
+      return formData && formData.status === '未开始'
     },
-    async onClickDelete() {
-      if (this.formData) {
-        if (this.formData.status === '未开始') {
-          try {
-            this.listLoading = true
-            await deleteBacklog(this.formData.backlogId)
-            this.$message.success('删除成功')
-            await this.getTableData()
-          } catch (e) {
-            console.log(e)
-          } finally {
-            this.listLoading = false
-          }
-        } else {
-          this.$message.error('当前工作不是未开始状态，无法删除')
-        }
-      } else {
-        this.$message.error('请先选择一个工作')
+    validateExport(formData) {
+      return function() {
+        return formData && formData.status === '进行中'
       }
     },
-    async onClickImport() {
-      if (this.formData) {
-        if (this.formData.status === '未开始') {
-          try {
-            this.listLoading = true
-            await addToCurrentSprint(this.formData.backlogId)
-            this.$message.success('导入成功')
-            await this.getTableData()
-          } catch (e) {
-            console.log(e)
-          } finally {
-            this.listLoading = false
-          }
-        } else {
-          this.$message.error('当前工作不是未开始状态，无法导入当前迭代')
-        }
-      } else {
-        this.$message.error('请先选择一个工作')
-      }
-    },
-    async onClickExport() {
-      if (this.formData) {
-        if (this.formData.status === '进行中') {
-          try {
-            this.listLoading = true
-            await removeFromCurrentSprint(this.formData.backlogId)
-            this.$message.success('导出成功')
-            await this.getTableData()
-          } catch (e) {
-            console.log(e)
-          } finally {
-            this.listLoading = false
-          }
-        } else {
-          this.$message.error('当前工作不是进行中状态，无法从当前迭代导出')
-        }
-      } else {
-        this.$message.error('请先选择一个工作')
-      }
-    },
-    onClickDetail() {
-      if (this.formData) {
-        this.$router.push('/backlog/update/' + this.formData.backlogId)
-      } else {
-        this.$message.error('请先选择一个工作')
-      }
-    },
-    onClickCancel() {
-      this.$refs.table.setCurrentRow()
-    },
-    async getTableData() {
-      this.listLoading = true
-      try {
-        const res = await getBacklogs(this.$store.getters.currentProjectId)
-        this.tableData = res.body
-      } catch (e) {
-        console.log(e)
-      } finally {
-        this.listLoading = false
-      }
+    afterSubmit() {
+      this.$router.go(0)
     }
   }
 }

@@ -35,9 +35,12 @@ export default {
         for (let i = 0; i < this.validates.length; i++) {
           const currFun = this.validates[i]
           if (typeof (currFun) === 'boolean') {
-            valid = currFun
+            valid = currFun && valid
           } else {
-            valid = await currFun()
+            valid = await currFun() && valid
+          }
+          if (valid === false) {
+            break
           }
         }
 
