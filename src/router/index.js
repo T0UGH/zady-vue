@@ -69,6 +69,12 @@ export const constantRoutes = [
         meta: { title: '当前项目', icon: 'form' }
       },
       {
+        path: 'update2',
+        name: '当前项目2',
+        component: () => import('@/views/project/update2/index'),
+        meta: { title: '当前项目2', icon: 'form' }
+      },
+      {
         path: 'insert',
         name: '新建项目',
         component: () => import('@/views/project/insert/index'),

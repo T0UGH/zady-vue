@@ -27,7 +27,7 @@
         导出
       </submit-button>
     </template>
-    <template slot="tableContent">
+    <template #tableContent>
       <el-table-column
         prop="backlogId"
         label="编号"
