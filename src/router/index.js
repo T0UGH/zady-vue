@@ -92,13 +92,6 @@ export const constantRoutes = [
         hidden: true,
         component: () => import('@/views/project/inviteUserForm/index'),
         meta: { title: '邀请用户', icon: 'peoples' }
-      },
-      {
-        path: 'userDetail/:userId',
-        name: '用户详情',
-        hidden: true,
-        component: () => import('@/views/project/userDetail/index'),
-        meta: { title: '用户详情', icon: 'people' }
       }
     ]
   },

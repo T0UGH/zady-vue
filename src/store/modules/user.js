@@ -1,7 +1,7 @@
-import { login, logout, getInfo } from '@/api/user'
+import { getUser } from '@/api/user'
 import { getProjectsByUser } from '../../api/project'
-import { getToken, setToken, removeToken } from '@/utils/auth'
-import { resetRouter } from '@/router'
+// import { getToken, setToken, removeToken } from '@/utils/auth'
+// import { resetRouter } from '@/router'
 
 const getDefaultState = () => {
   return {
@@ -68,14 +68,24 @@ const actions = {
     })
   },
 
+  async getUserInfo({ commit, state }) {
+    try {
+      const { body } = await getUser(state.userId)
+      commit('SET_NAME', body.name)
+      commit('SET_AVATAR', body.avatar)
+    } catch (e) {
+      console.log(e)
+    }
+  },
+
   // remove token
-  resetToken({ commit }) {
-    return new Promise(resolve => {
-      removeToken() // must remove  token  first
-      commit('RESET_STATE')
-      resolve()
-    })
-  }
+  // resetToken({ commit }) {
+  //   return new Promise(resolve => {
+  //     removeToken() // must remove  token  first
+  //     commit('RESET_STATE')
+  //     resolve()
+  //   })
+  // }
 }
 
 export default {

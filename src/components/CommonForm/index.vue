@@ -7,7 +7,7 @@
           size="small"
           :request="submitRequest"
           :validates="[validateForm]"
-          :submit-data="[formData]"
+          :submit-data="[allFormData]"
           :after-submit="afterSuccess"
         >
           提交
@@ -62,6 +62,20 @@ export default {
   data() {
     return {
       formData: this.newFormData()
+    }
+  },
+  computed: {
+    allFormData() {
+      const allFormData = {}
+      // 先加载additional的
+      for (const prop in this.additionalFormData) {
+        allFormData[prop] = this.additionalFormData[prop]
+      }
+      // 然后在加载formData的
+      for (const prop in this.formData) {
+        allFormData[prop] = this.formData[prop]
+      }
+      return allFormData
     }
   },
   created() {

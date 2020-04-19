@@ -1,28 +1,29 @@
 <template>
-  <div class="app-container">
-    <el-form>
-      <el-form-item label-width="120px">
-        <el-button-group>
-          <el-button size="medium" :loading="loading" @click="onSubmit">提交</el-button>
-          <el-button size="medium" :loading="loading" @click="onReturn">返回</el-button>
-        </el-button-group>
-      </el-form-item>
+  <common-form
+    :submit-request="updateUser"
+    :additional-form-data="{userId: userId, avatar: selected}"
+    :after-success="afterSuccess"
+  >
+    <template #formContent="{formData}">
       <el-form-item label="头像列表">
-        <el-radio v-for="avatar in avatarList" :key="avatar" v-model="selected" :label="avatar"><el-avatar :src="avatar"/></el-radio>
+        <el-radio v-for="avatar in avatarList" :key="avatar" v-model="selected" :label="avatar"><el-avatar :src="avatar" /></el-radio>
       </el-form-item>
-    </el-form>
-  </div>
+    </template>
+  </common-form>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
 import { updateUser } from '@/api/user'
+import CommonForm from '@/components/CommonForm/index'
 
 export default {
   name: 'UserAvatar',
+  components: {
+    CommonForm
+  },
   data() {
     return {
-      loading: false,
       selected: null,
       avatarList: [
         'https://i.loli.net/2020/04/09/Sdl7onfAyYRVC2X.jpg',
@@ -38,28 +39,9 @@ export default {
     ])
   },
   methods: {
-    onReturn() {
-      this.$router.go(-1)
-    },
-    async onSubmit() {
-      if (this.selected) {
-        try {
-          const user = {
-            userId: this.userId,
-            avatar: this.selected
-          }
-          this.loading = true
-          await updateUser(user)
-          this.$store.commit('user/SET_AVATAR', user.avatar)
-          this.$message.success('更新头像成功')
-        } catch (e) {
-          console.log(e)
-        } finally {
-          this.loading = false
-        }
-      } else {
-        this.$message.error('当前没有头像被选中')
-      }
+    updateUser,
+    async afterSuccess() {
+      await this.$store.dispatch('user/getUserInfo')
     }
   }
 }
