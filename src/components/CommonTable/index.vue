@@ -29,7 +29,7 @@
           >
             提交
           </submit-button>
-          <slot name="buttonSlot" :formData="formData" />
+          <slot name="buttonSlot" :formData="formData" :defaultAfterSubmit="afterSubmit" />
           <el-button size="small" @click="onClickNotSelect">不选</el-button>
           <el-button size="small" @click="onClickCancel">取消</el-button>
           <return-button size="small" />
@@ -43,7 +43,7 @@
       </el-col>
       <el-col :span="12">
         <el-form ref="form" size="small" :model="formData" label-width="120px">
-          <slot name="formContent" :formData="formData" :allFormData="allFormData"/>
+          <slot name="formContent" :formData="formData" :allFormData="allFormData" />
         </el-form>
       </el-col>
     </el-card>

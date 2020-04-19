@@ -1,16 +1,12 @@
 <template>
-  <div class="app-container">
-    <el-form :inline="true" class="demo-form-inline">
-      <el-form-item>
-        <el-input v-model="search" prefix-icon="el-icon-search" placeholder="输入关键字搜索" />
-      </el-form-item>
-      <el-form-item>
-        <el-button-group>
-          <el-button size="medium" @click="onReturn">返回</el-button>
-        </el-button-group>
-      </el-form-item>
-    </el-form>
-    <el-table ref="table" v-loading="listLoading" :data="filteredData">
+  <common-table
+    :load-request="loadRequest"
+    no-delete
+    no-insert
+    no-update
+    :primary-keys="['projectId']"
+  >
+    <template #tableContent>
       <el-table-column
         prop="projectId"
         label="项目编号"
@@ -25,47 +21,43 @@
         label="角色"
         sortable
       />
-    </el-table>
-    <el-pagination layout="prev, pager, next" :total="tableData.length" :page-size="pageSize" :current-page.sync="currentPage" />
-  </div>
+    </template>
+    <template #formContent="{formData}">
+      <el-form-item label="项目ID">
+        <el-input v-model="formData.projectId" disabled />
+      </el-form-item>
+      <el-form-item label="项目名称">
+        <el-input v-model="formData.name" disabled />
+      </el-form-item>
+      <el-form-item label="项目描述">
+        <el-input v-model="formData.note" disabled />
+      </el-form-item>
+      <el-form-item label="Github地址">
+        <el-input v-model="formData.githubUrl" disabled />
+      </el-form-item>
+      <el-form-item label="我的角色">
+        <template v-if="formData.role">
+          <el-input v-model="formData.role.role" disabled />
+        </template>
+        <template v-else>
+          <el-input disabled />
+        </template>
+      </el-form-item>
+    </template>
+  </common-table>
 </template>
 
 <script>
+import CommonTable from '@/components/CommonTable/index'
 export default {
   name: 'ProjectTable',
-  data() {
-    return {
-      listLoading: false,
-      search: '',
-      pageSize: 10,
-      currentPage: 1,
-      tableData: []
-    }
-  },
-  computed: {
-    filteredData() {
-      return this.tableData
-        .filter(data => !this.search || data.name.includes(this.search))
-        .slice((this.currentPage - 1) * this.pageSize, this.currentPage * this.pageSize)
-    }
-  },
-  created() {
-    this.getTableData()
-  },
+  components: { CommonTable },
   methods: {
-    onReturn() {
-      this.$router.go(-1)
-    },
-    async getTableData() {
-      this.listLoading = true
-      try {
-        await this.$store.dispatch('user/getProjectsByUser')
-        this.tableData = this.$store.getters.projectList
-      } catch (e) {
-        console.log(e)
-      } finally {
-        this.listLoading = false
-      }
+    async loadRequest() {
+      const res = {}
+      await this.$store.dispatch('user/getProjectsByUser')
+      res.body = this.$store.getters.projectList
+      return res
     }
   }
 }

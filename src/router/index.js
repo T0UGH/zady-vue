@@ -124,7 +124,7 @@ export const constantRoutes = [
       },
       {
         path: 'invite',
-        name: '邀请列表',
+        name: '我的邀请列表',
         hidden: true,
         component: () => import('@/views/user/inviteTable/index'),
         meta: { title: '邀请列表', icon: 'table' }

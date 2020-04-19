@@ -7,12 +7,12 @@
     :delete-request="deleteBacklog"
     :primary-keys="['backlogId']"
   >
-    <template #buttonSlot="{formData}">
+    <template #buttonSlot="{formData, defaultAfterSubmit}">
       <submit-button
         size="small"
         :request="addToCurrentSprint"
         :submit-data="[formData.backlogId]"
-        :after-submit="afterSubmit"
+        :after-submit="defaultAfterSubmit"
         :validates="[validateImport(formData)]"
       >
         导入
@@ -21,7 +21,7 @@
         size="small"
         :request="removeFromCurrentSprint"
         :submit-data="[formData.backlogId]"
-        :after-submit="afterSubmit"
+        :after-submit="defaultAfterSubmit"
         :validates="[validateExport(formData)]"
       >
         导出
@@ -116,9 +116,6 @@ export default {
       return function() {
         return formData && formData.status === '进行中'
       }
-    },
-    afterSubmit() {
-      this.$router.go(0)
     }
   }
 }

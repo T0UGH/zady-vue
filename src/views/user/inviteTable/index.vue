@@ -1,18 +1,22 @@
 <template>
-  <div class="app-container">
-    <el-form :inline="true" class="demo-form-inline">
-      <el-form-item>
-        <el-input v-model="search" prefix-icon="el-icon-search" placeholder="输入关键字搜索" />
-      </el-form-item>
-      <el-form-item>
-        <el-button-group>
-          <el-button size="medium" @click="onReceiveInvite">接受邀请</el-button>
-          <el-button size="medium" @click="onClickCancel">不选</el-button>
-          <el-button size="medium" @click="onReturn">返回</el-button>
-        </el-button-group>
-      </el-form-item>
-    </el-form>
-    <el-table ref="table" v-loading="listLoading" highlight-current-row :data="filteredData" @current-change="handleCurrentChange">
+  <common-table
+    :load-request="loadRequest"
+    no-delete
+    no-insert
+    no-update
+    :primary-keys="['projectId']"
+  >
+    <template #buttonSlot="{formData, defaultAfterSubmit}">
+      <submit-button
+        size="small"
+        :request="acceptInvite"
+        :submit-data="[formData.projectId]"
+        :after-submit="defaultAfterSubmit"
+      >
+        接受邀请
+      </submit-button>
+    </template>
+    <template #tableContent>
       <el-table-column
         prop="projectId"
         label="项目编号"
@@ -27,78 +31,51 @@
         label="角色"
         sortable
       />
-    </el-table>
-    <el-pagination layout="prev, pager, next" :total="tableData.length" :page-size="pageSize" :current-page.sync="currentPage" />
-  </div>
+    </template>
+    <template #formContent="{formData}">
+      <el-form-item label="项目ID">
+        <el-input v-model="formData.projectId" disabled />
+      </el-form-item>
+      <el-form-item label="项目名称">
+        <el-input v-model="formData.name" disabled />
+      </el-form-item>
+      <el-form-item label="项目描述">
+        <el-input v-model="formData.note" disabled />
+      </el-form-item>
+      <el-form-item label="Github地址">
+        <el-input v-model="formData.githubUrl" disabled />
+      </el-form-item>
+      <el-form-item label="我的角色">
+        <template v-if="formData.role">
+          <el-input v-model="formData.role.role" disabled />
+        </template>
+        <template v-else>
+          <el-input disabled />
+        </template>
+      </el-form-item>
+    </template>
+  </common-table>
 </template>
 
 <script>
+import CommonTable from '@/components/CommonTable/index'
+import SubmitButton from '@/components/Button/SubmitButton'
 import { getInviteProjectsByUser, acceptInvite } from '@/api/user'
 import { mapGetters } from 'vuex'
 
 export default {
-  name: 'UserInviteTable',
-  data() {
-    return {
-      listLoading: false,
-      search: '',
-      pageSize: 10,
-      currentPage: 1,
-      formData: null,
-      tableData: []
-    }
-  },
+  name: 'InviteTable',
+  components: { CommonTable, SubmitButton },
   computed: {
-    filteredData() {
-      return this.tableData
-        .filter(data => !this.search || data.name.includes(this.search))
-        .slice((this.currentPage - 1) * this.pageSize, this.currentPage * this.pageSize)
-    },
     ...mapGetters([
       'userId'
     ])
   },
-  created() {
-    this.getTableData()
-  },
   methods: {
-    handleCurrentChange(val) {
-      this.currentRow = val
-      console.log(this.formData)
+    loadRequest() {
+      return getInviteProjectsByUser(this.userId)
     },
-    async onReceiveInvite() {
-      if (this.formData) {
-        try {
-          this.listLoading = true
-          await acceptInvite(this.formData.projectId)
-          this.$message.success('接受邀请成功')
-          await this.getTableData()
-        } catch (e) {
-          console.log(e)
-        } finally {
-          this.listLoading = false
-        }
-      } else {
-        this.$message.error('请先选择一个项目')
-      }
-    },
-    onReturn() {
-      this.$router.go(-1)
-    },
-    onClickCancel() {
-      this.$refs.table.setCurrentRow()
-    },
-    async getTableData() {
-      this.listLoading = true
-      try {
-        const res = await getInviteProjectsByUser(this.userId)
-        this.tableData = res.body
-      } catch (e) {
-        console.log(e)
-      } finally {
-        this.listLoading = false
-      }
-    }
+    acceptInvite
   }
 }
 </script>
