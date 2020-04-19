@@ -8,23 +8,25 @@
           </el-form-item>
         </el-form>
         <el-button-group style="float: right;">
-          <el-button size="small" @click="onClickInsert">新增</el-button>
+          <el-button v-if="!noInsert" size="small" @click="onClickInsert">新增</el-button>
           <!--<jump-button to="/" size="small">跳转</jump-button>-->
           <submit-button
+            v-if="!noDelete"
             size="small"
             :validates="[validateDelete]"
             :after-submit="afterSubmit"
             :request="deleteRequest"
-            :submit-data="allFormData[deleteKey]"
+            :submit-data="formData[primaryKey]"
           >
             删除
           </submit-button>
           <submit-button
+            v-if="!(noInsert && noUpdate)"
             size="small"
             :validates="[validateForm, () => true]"
             :after-submit="afterSubmit"
             :request="submitRequest"
-            :submit-data="allFormData"
+            :submit-data="allFormData()"
           >
             提交
           </submit-button>
@@ -52,21 +54,48 @@
 <script>
 import ReturnButton from '@/components/Button/ReturnButton.vue'
 import SubmitButton from '@/components/Button/SubmitButton.vue'
-import JumpButton from '@/components/Button/JumpButton.vue'
+// import JumpButton from '@/components/Button/JumpButton.vue'
 
 export default {
   name: 'CommonTable',
   components: {
     ReturnButton,
-    SubmitButton,
-    JumpButton
+    // JumpButton,
+    SubmitButton
   },
   props: {
-    loadRequest: Function, // 传入一个不带参数的promise
-    insertRequest: Function, // 带一个参数SubmitData
-    updateRequest: Function, // 带一个参数SubmitData
-    deleteRequest: Function, // 带一个参数SubmitData
-    deleteKey: String, // 用什么做参数来删除
+    loadRequest: {
+      type: Function,
+      default: function() {}
+    },
+    insertRequest: {
+      type: Function,
+      default: function() {}
+    }, // 传入一个不带参数的promise
+    updateRequest: {
+      type: Function,
+      default: function() {}
+    },
+    deleteRequest: {
+      type: Function,
+      default: function() {}
+    },
+    primaryKey: {
+      type: String,
+      required: true
+    }, // 用什么做参数来删除
+    noInsert: {
+      type: Boolean,
+      default: () => false
+    }, // 不可新增标志
+    noUpdate: {
+      type: Boolean,
+      default: () => false
+    }, // 不可更新标志
+    noDelete: {
+      type: Boolean,
+      default: () => false
+    }, // 不可删除标志
     additionalFormData: {
       type: Object,
       default: () => {}
@@ -79,8 +108,7 @@ export default {
       currentPage: 1,
       formData: this.newFormData(),
       tableData: [],
-      loading: false,
-      mode: 'insert' // insert|update
+      loading: false
     }
   },
   computed: {
@@ -89,6 +117,23 @@ export default {
       return this.tableData
         .filter(data => !this.search || this.convertArrToStr(Object.values(data)).includes(this.search))
         .slice((this.currentPage - 1) * this.pageSize, this.currentPage * this.pageSize)
+    },
+    submitRequest() {
+      if (!this.noInsert && !this.noUpdate) {
+        return this.formData[this.primaryKey] ? this.updateRequest : this.insertRequest
+      } else if (this.noInsert && !this.noUpdate) {
+        return this.updateRequest
+      } else {
+        return function() {}
+      }
+    }
+  },
+  created() {
+    this.loadTableData()
+  },
+  methods: {
+    onClickCancel() {
+      this.afterSubmit()
     },
     allFormData() {
       const allFormData = {}
@@ -102,19 +147,7 @@ export default {
       }
       return allFormData
     },
-    submitRequest() {
-      return this.mode === 'insert' ? this.insertRequest : this.updateRequest
-    }
-  },
-  created() {
-    this.loadTableData()
-  },
-  methods: {
-    onClickCancel() {
-      this.afterSubmit()
-    },
     onClickInsert() {
-      this.mode = 'insert'
       this.$refs.table.setCurrentRow()
       this.formData = this.newFormData()
     },
@@ -128,18 +161,17 @@ export default {
       return !!(this.formData && this.formData.status === '未开始')
     },
     onCurrentChange(val) {
-      this.mode = 'update'
-      this.formData = val
+      if (val) {
+        this.formData = val
+      }
       console.log(this.formData)
     },
     onClickNotSelect() {
-      this.mode = 'insert'
       this.$refs.table.setCurrentRow()
       this.formData = this.newFormData()
     },
     async afterSubmit() {
       await this.loadTableData()
-      this.mode = 'insert'
       this.formData = this.newFormData()
     },
     async loadTableData() {

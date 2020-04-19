@@ -5,24 +5,24 @@
     :update-request="updateBacklog"
     :additional-form-data="additionalData"
     :delete-request="deleteBacklog"
-    delete-key="backlogId"
+    primary-key="backlogId"
   >
-    <template slot="buttonSlot" slot-scope="buttonProps">
+    <template #buttonSlot="{formData}">
       <submit-button
         size="small"
         :request="addToCurrentSprint"
-        :submit-data="buttonProps.formData.backlogId"
+        :submit-data="formData.backlogId"
         :after-submit="afterSubmit"
-        :validates="[validateImport(buttonProps.formData)]"
+        :validates="[validateImport(formData)]"
       >
         导入
       </submit-button>
       <submit-button
         size="small"
         :request="removeFromCurrentSprint"
-        :submit-data="buttonProps.formData.backlogId"
+        :submit-data="formData.backlogId"
         :after-submit="afterSubmit"
-        :validates="[validateExport(buttonProps.formData)]"
+        :validates="[validateExport(formData)]"
       >
         导出
       </submit-button>
@@ -47,18 +47,18 @@
         label="状态"
       />
     </template>
-    <template slot="formContent" slot-scope="slotProps">
+    <template #formContent="{formData}">
       <el-form-item label="工作ID" prop="backlogId">
-        <el-input v-model="slotProps.formData.backlogId" disabled />
+        <el-input v-model="formData.backlogId" disabled />
       </el-form-item>
       <el-form-item label="工作名称" prop="name" :rules="[{required: true, message: '工作名称不能为空', trigger: 'blur'}]">
-        <el-input v-model="slotProps.formData.name" />
+        <el-input v-model="formData.name" />
       </el-form-item>
       <el-form-item label="工作描述" prop="note">
-        <el-input v-model="slotProps.formData.note" />
+        <el-input v-model="formData.note" />
       </el-form-item>
       <el-form-item label="优先级" prop="priority" :rules="[{required: true, message: '优先级不能为空', trigger: 'blur'}]">
-        <el-select v-model="slotProps.formData.priority" placeholder="请选择">
+        <el-select v-model="formData.priority" placeholder="请选择">
           <el-option
             v-for="item in backlogPriorityEnum"
             :key="item"
@@ -68,10 +68,10 @@
         </el-select>
       </el-form-item>
       <el-form-item label="当前状态" prop="status">
-        <el-input v-model="slotProps.formData.status" disabled />
+        <el-input v-model="formData.status" disabled />
       </el-form-item>
       <el-form-item label="所属迭代" prop="sprintId">
-        <el-input v-model="slotProps.formData.sprintId" disabled/>
+        <el-input v-model="formData.sprintId" disabled/>
       </el-form-item>
     </template>
   </common-table>
