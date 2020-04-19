@@ -74,7 +74,7 @@ export default {
       if (!this.noLoad) {
         this.loadTableData()
       } else {
-        this.newFormData()
+        this.formData = this.newFormData()
       }
     },
     newFormData() {

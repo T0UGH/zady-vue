@@ -1,58 +1,33 @@
 <template>
-  <div class="app-container">
-    <el-form ref="form" :model="newProject" label-width="120px">
-      <el-form-item>
-        <el-button-group>
-          <el-button size="medium" :loading="loading" @click="onSubmit">提交</el-button>
-        </el-button-group>
+  <common-form
+    no-load
+    :submit-request="insertProject"
+  >
+    <template #formContent="{formData}">
+      <el-form-item label="项目名称" prop="name" :rules="[{required: true, message: '项目名称不能为空'}]">
+        <el-input v-model="formData.name" />
       </el-form-item>
-      <el-form-item label="项目名称" :rules="[{required: true, message: '项目名称不能为空'}]">
-        <el-input v-model="newProject.name" />
+      <el-form-item label="项目描述" prop="note">
+        <el-input v-model="formData.note" />
       </el-form-item>
-      <el-form-item label="项目描述">
-        <el-input v-model="newProject.note" />
+      <el-form-item label="Github地址" prop="githubUrl">
+        <el-input v-model="formData.githubUrl" />
       </el-form-item>
-      <el-form-item label="Github地址">
-        <el-input v-model="newProject.githubUrl" />
-      </el-form-item>
-    </el-form>
-  </div>
+    </template>
+  </common-form>
 </template>
 
 <script>
+import CommonForm from '@/components/CommonForm'
 import { insertProject } from '@/api/project'
-import { Message } from 'element-ui'
 
 export default {
   name: 'InsertProject',
-  data() {
-    return {
-      loading: false,
-      newProject: {
-        name: null,
-        note: null,
-        githubUrl: null
-      }
-    }
+  components: {
+    CommonForm
   },
   methods: {
-    async onSubmit() {
-      try {
-        const valid = await this.$refs.form.validate()
-        if (valid) {
-          this.loading = true
-          await insertProject(this.newProject)
-          await this.$store.dispatch('user/getProjectsByUser')
-          Message.success('新建成功')
-          this.loading = false
-        } else {
-          return false
-        }
-      } catch (e) {
-        console.log(e)
-        this.loading = false
-      }
-    }
+    insertProject
   }
 }
 </script>

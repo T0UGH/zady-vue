@@ -23,7 +23,7 @@
           <submit-button
             v-if="!(noInsert && noUpdate)"
             size="small"
-            :validates="[validateForm, () => true]"
+            :validates="[validateForm]"
             :after-submit="afterSubmit"
             :request="submitRequest"
             :submit-data="allFormData()"
