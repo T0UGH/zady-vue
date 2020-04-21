@@ -76,7 +76,7 @@ const actions = {
     } catch (e) {
       console.log(e)
     }
-  },
+  }
 
   // remove token
   // resetToken({ commit }) {

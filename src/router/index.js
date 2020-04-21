@@ -150,6 +150,35 @@ export const asyncRoutes = [
     ]
   },
   {
+    path: '/sprint',
+    component: Layout,
+    redirect: '/sprint/update',
+    name: '迭代管理',
+    meta: { title: '迭代管理', icon: 'example' },
+    children: [
+      {
+        path: 'update',
+        name: '当前迭代',
+        component: () => import('@/views/sprint/update/index'),
+        meta: { title: '当前迭代', icon: 'form' }
+      },
+      {
+        path: 'insert',
+        name: '新建迭代',
+        hidden: true,
+        component: () => import('@/views/sprint/insert/index'),
+        meta: { title: '新建迭代', icon: 'form' }
+      },
+      {
+        path: 'history',
+        name: '历史迭代',
+        hidden: true,
+        component: () => import('@/views/sprint/historyTable/index'),
+        meta: { title: '历史迭代', icon: 'table' }
+      }
+    ]
+  },
+  {
     path: 'external-link',
     component: Layout,
     children: [

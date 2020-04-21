@@ -52,7 +52,13 @@ export default {
     },
     afterSuccess: {
       type: Function,
-      default: function() {}
+      default: function() {
+        return async function f() {
+          if (!this.noLoad) {
+            this.loadTableData()
+          }
+        }
+      }
     },
     additionalFormData: {
       type: Object,
