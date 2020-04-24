@@ -12,6 +12,7 @@ const getters = {
   userId: state => state.user.userId,
   backlogStatusEnum: state => state.constants.backlogStatusEnum,
   backlogPriorityEnum: state => state.constants.backlogPriorityEnum,
-  rolesEnum: state => state.constants.rolesEnum
+  rolesEnum: state => state.constants.rolesEnum,
+  storyStatusEnum: state => state.constants.storyStatusEnum
 }
 export default getters

@@ -179,6 +179,27 @@ export const asyncRoutes = [
     ]
   },
   {
+    path: '/story',
+    component: Layout,
+    redirect: '/story/insert',
+    name: '故事管理',
+    meta: { title: '故事管理', icon: 'example' },
+    children: [
+      {
+        path: 'insert',
+        name: '创建用户故事',
+        component: () => import('@/views/story/insertTable/index'),
+        meta: { title: '创建用户故事', icon: 'form' }
+      },
+      {
+        path: 'drag',
+        name: '故事看板',
+        component: () => import('@/views/story/multiDrag/index'),
+        meta: { title: '故事看板', icon: 'table' }
+      }
+    ]
+  },
+  {
     path: 'external-link',
     component: Layout,
     children: [

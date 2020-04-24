@@ -1,8 +1,8 @@
 {
-  "name": "vue-admin-template",
+  "name": "zady-vue",
   "version": "4.2.1",
-  "description": "A vue admin template with Element UI & axios & iconfont & permission control & lint",
-  "author": "Pan <panfree23@gmail.com>",
+  "description": "zady vue",
+  "author": "T0UGH <wang.g.p@foxmail.com>",
   "license": "MIT",
   "scripts": {
     "dev": "vue-cli-service serve",
@@ -23,7 +23,9 @@
     "path-to-regexp": "2.4.0",
     "vue": "2.6.10",
     "vue-router": "3.0.6",
-    "vuex": "3.1.0"
+    "vuex": "3.1.0",
+    "vuedraggable": "2.20.0",
+    "sortablejs": "latest"
   },
   "devDependencies": {
     "@babel/core": "7.0.0",

@@ -1,7 +1,8 @@
 const state = {
   backlogStatusEnum: ['未开始', '进行中', '已完成'],
   backlogPriorityEnum: ['A', 'B', 'C', 'D', 'E'],
-  rolesEnum: ['master', 'owner', 'developer', 'tester']
+  rolesEnum: ['master', 'owner', 'developer', 'tester'],
+  storyStatusEnum: ['待导入', '待完成', '完成中', '待测试', '测试中', '已完成']
 }
 
 const mutations = {
