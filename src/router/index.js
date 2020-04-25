@@ -200,6 +200,21 @@ export const asyncRoutes = [
     ]
   },
   {
+    path: '/bug',
+    component: Layout,
+    redirect: '/bug/table',
+    name: 'BUG管理',
+    meta: { title: 'BUG管理', icon: 'bug' },
+    children: [
+      {
+        path: 'table',
+        name: 'BUG列表',
+        component: () => import('@/views/bug/table/index'),
+        meta: { title: 'BUG列表', icon: 'bug' }
+      }
+    ]
+  },
+  {
     path: 'external-link',
     component: Layout,
     children: [

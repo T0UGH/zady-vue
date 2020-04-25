@@ -19,10 +19,10 @@
     </template>
     <template #tableContent>
       <el-table-column
-        prop="storyId"
-        label="故事ID"
-        sortable
-      />
+      prop="storyId"
+      label="故事ID"
+      sortable
+    />
       <el-table-column
         prop="name"
         label="内容"

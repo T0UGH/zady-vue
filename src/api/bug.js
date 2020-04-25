@@ -1,12 +1,11 @@
 import request from '@/utils/request'
 
-export function getBugsBySprint(sprintId, statusStr) {
+export function getBugsBySprint(sprintId) {
   return request({
     url: '/bugs',
     method: 'get',
     params: {
-      sprintId: sprintId,
-      statusStr: statusStr
+      sprintId: sprintId
     }
   })
 }
