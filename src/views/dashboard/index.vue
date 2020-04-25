@@ -1,15 +1,17 @@
 <template>
   <div class="dashboard-container">
-    <div class="dashboard-text">name: {{ name }}</div>
-    <div class="dashboard-text">roles: <span v-for="role in roles" :key="role">{{ role }}|</span></div>
+    <panel-group />
+    <bornout-chart></bornout-chart>
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
-
+import PanelGroup from '@/views/dashboard/PanelGroup'
+import BornoutChart from '@/views/dashboard/BornoutChart'
 export default {
   name: 'Dashboard',
+  components: { BornoutChart, PanelGroup },
   computed: {
     ...mapGetters([
       'name',

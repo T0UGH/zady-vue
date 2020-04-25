@@ -24,8 +24,9 @@
     "vue": "2.6.10",
     "vue-router": "3.0.6",
     "vuex": "3.1.0",
-    "vuedraggable": "2.20.0",
-    "sortablejs": "latest"
+    "sortablejs": "latest",
+    "vue-count-to": "1.0.13",
+    "echarts": "4.2.1"
   },
   "devDependencies": {
     "@babel/core": "7.0.0",
