@@ -30,7 +30,9 @@ export default {
   methods: {
     insertProject,
     async afterSuccess() {
+      await this.$store.dispatch('user/getUserInfo')
       await this.$store.dispatch('user/getProjectsByUser')
+      this.$router.go(0)
     }
   }
 }

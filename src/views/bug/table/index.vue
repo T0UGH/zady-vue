@@ -1,5 +1,6 @@
 <template>
   <common-table
+    v-if="currentProject && currentProject.currentSprintId"
     :load-request="loadRequest"
     :insert-request="createBug"
     :update-request="updateBug"
@@ -141,7 +142,9 @@ export default {
     ])
   },
   created() {
-    this.loadStoryList()
+    if (this.currentProject && this.currentProject.currentSprintId) {
+      this.loadStoryList()
+    }
   },
   methods: {
     createBug,

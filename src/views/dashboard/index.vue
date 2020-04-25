@@ -1,7 +1,7 @@
 <template>
   <div class="dashboard-container">
-    <panel-group />
-    <bornout-chart></bornout-chart>
+    <panel-group v-if="currentProject && currentProject.currentSprintId" />
+    <bornout-chart v-if="currentProject && currentProject.currentSprintId"></bornout-chart>
   </div>
 </template>
 
@@ -15,7 +15,8 @@ export default {
   computed: {
     ...mapGetters([
       'name',
-      'roles'
+      'roles',
+      'currentProject'
     ])
   }
 }

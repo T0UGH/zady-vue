@@ -38,6 +38,12 @@ export const constantRoutes = [
   },
 
   {
+    path: '/register',
+    component: () => import('@/views/register/index'),
+    hidden: true
+  },
+
+  {
     path: '/404',
     component: () => import('@/views/404'),
     hidden: true
@@ -53,47 +59,6 @@ export const constantRoutes = [
       component: () => import('@/views/dashboard/index'),
       meta: { title: '进度看板', icon: 'dashboard' }
     }]
-  },
-
-  {
-    path: '/project',
-    component: Layout,
-    redirect: '/project/update',
-    name: '项目管理',
-    meta: { title: '项目管理', icon: 'example' },
-    children: [
-      {
-        path: 'update',
-        name: '当前项目',
-        component: () => import('@/views/project/update/index'),
-        meta: { title: '当前项目', icon: 'form' }
-      },
-      {
-        path: 'insert',
-        name: '新建项目',
-        component: () => import('@/views/project/insert/index'),
-        meta: { title: '新建项目', icon: 'form' }
-      },
-      {
-        path: 'invite',
-        name: '邀请列表',
-        component: () => import('@/views/project/inviteTable/index'),
-        meta: { title: '邀请列表', icon: 'peoples' }
-      },
-      {
-        path: 'user',
-        name: '用户列表',
-        component: () => import('@/views/project/userTable/index'),
-        meta: { title: '用户列表', icon: 'peoples' }
-      },
-      {
-        path: 'inviteUser',
-        name: '邀请用户',
-        hidden: true,
-        component: () => import('@/views/project/inviteUserForm/index'),
-        meta: { title: '邀请用户', icon: 'peoples' }
-      }
-    ]
   },
   {
     path: '/user',
@@ -135,11 +100,51 @@ export const constantRoutes = [
 
 export const asyncRoutes = [
   {
+    path: '/project',
+    component: Layout,
+    redirect: '/project/update',
+    name: '项目管理',
+    meta: { title: '项目管理', icon: 'example' },
+    children: [
+      {
+        path: 'update',
+        name: '当前项目',
+        component: () => import('@/views/project/update/index'),
+        meta: { title: '当前项目', icon: 'form', roles: ['master', 'owner', 'tester', 'developer'] }
+      },
+      {
+        path: 'insert',
+        name: '新建项目',
+        component: () => import('@/views/project/insert/index'),
+        meta: { title: '新建项目', icon: 'form' }
+      },
+      {
+        path: 'invite',
+        name: '邀请列表',
+        component: () => import('@/views/project/inviteTable/index'),
+        meta: { title: '邀请列表', icon: 'peoples', roles: ['master', 'owner', 'tester', 'developer'] }
+      },
+      {
+        path: 'user',
+        name: '用户列表',
+        component: () => import('@/views/project/userTable/index'),
+        meta: { title: '用户列表', icon: 'peoples', roles: ['master', 'owner', 'tester', 'developer'] }
+      },
+      {
+        path: 'inviteUser',
+        name: '邀请用户',
+        hidden: true,
+        component: () => import('@/views/project/inviteUserForm/index'),
+        meta: { title: '邀请用户', icon: 'peoples', roles: ['master', 'owner', 'tester', 'developer'] }
+      }
+    ]
+  },
+  {
     path: '/backlog',
     component: Layout,
     redirect: '/backlog/table',
     name: '工作表管理',
-    meta: { title: '工作表管理', icon: 'example' },
+    meta: { title: '工作表管理', icon: 'example', roles: ['master', 'owner', 'tester', 'developer'] },
     children: [
       {
         path: 'table',
@@ -154,27 +159,27 @@ export const asyncRoutes = [
     component: Layout,
     redirect: '/sprint/update',
     name: '迭代管理',
-    meta: { title: '迭代管理', icon: 'example' },
+    meta: { title: '迭代管理', icon: 'example', roles: ['master', 'owner', 'tester', 'developer'] },
     children: [
       {
         path: 'update',
         name: '当前迭代',
         component: () => import('@/views/sprint/update/index'),
-        meta: { title: '当前迭代', icon: 'form' }
+        meta: { title: '当前迭代', icon: 'form', roles: ['master', 'owner', 'tester', 'developer'] }
       },
       {
         path: 'insert',
         name: '新建迭代',
         hidden: true,
         component: () => import('@/views/sprint/insert/index'),
-        meta: { title: '新建迭代', icon: 'form' }
+        meta: { title: '新建迭代', icon: 'form', roles: ['master', 'owner'] }
       },
       {
         path: 'history',
         name: '历史迭代',
         hidden: true,
         component: () => import('@/views/sprint/historyTable/index'),
-        meta: { title: '历史迭代', icon: 'table' }
+        meta: { title: '历史迭代', icon: 'table', roles: ['master', 'owner', 'tester', 'developer'] }
       }
     ]
   },
@@ -183,19 +188,19 @@ export const asyncRoutes = [
     component: Layout,
     redirect: '/story/insert',
     name: '故事管理',
-    meta: { title: '故事管理', icon: 'example' },
+    meta: { title: '故事管理', icon: 'excel', roles: ['master', 'owner', 'tester', 'developer'] },
     children: [
       {
         path: 'insert',
         name: '创建用户故事',
         component: () => import('@/views/story/insertTable/index'),
-        meta: { title: '创建用户故事', icon: 'form' }
+        meta: { title: '创建用户故事', icon: 'form', roles: ['master', 'owner'] }
       },
       {
         path: 'drag',
         name: '故事看板',
         component: () => import('@/views/story/multiDrag/index'),
-        meta: { title: '故事看板', icon: 'table' }
+        meta: { title: '故事看板', icon: 'table', roles: ['master', 'owner', 'tester', 'developer'] }
       }
     ]
   },
@@ -204,13 +209,13 @@ export const asyncRoutes = [
     component: Layout,
     redirect: '/bug/table',
     name: 'BUG管理',
-    meta: { title: 'BUG管理', icon: 'bug' },
+    meta: { title: 'BUG管理', icon: 'bug', roles: ['master', 'owner', 'tester', 'developer'] },
     children: [
       {
         path: 'table',
         name: 'BUG列表',
         component: () => import('@/views/bug/table/index'),
-        meta: { title: 'BUG列表', icon: 'bug' }
+        meta: { title: 'BUG列表', icon: 'bug', roles: ['master', 'owner', 'tester', 'developer'] }
       }
     ]
   },
@@ -219,8 +224,8 @@ export const asyncRoutes = [
     component: Layout,
     children: [
       {
-        path: 'https://panjiachen.github.io/vue-element-admin-site/#/',
-        meta: { title: 'External Link', icon: 'link' }
+        path: 'https://github.com/T0UGH/zady-vue',
+        meta: { title: '联系作者', icon: 'link' }
       }
     ]
   },

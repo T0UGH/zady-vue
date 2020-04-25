@@ -3,7 +3,7 @@
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
 
       <div class="title-container">
-        <h3 class="title">Login Form</h3>
+        <h3 class="title">Zady</h3>
       </div>
 
       <el-form-item prop="username">
@@ -41,11 +41,10 @@
         </span>
       </el-form-item>
 
-      <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">Login</el-button>
+      <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">登录</el-button>
 
       <div class="tips">
-        <span style="margin-right:20px;">username: admin</span>
-        <span> password: any</span>
+        <span>还没有账号吗？<el-link type="primary"><router-link to="/register">点击注册</router-link></el-link></span>
       </div>
 
     </el-form>
@@ -55,9 +54,6 @@
 <script>
 import { validUsername } from '@/utils/validate'
 import { login } from '@/api/user'
-import router from '@/router'
-import { resetRouter } from '@/router'
-import { getProjectsByUser } from '../../api/project'
 
 export default {
   name: 'Login',
@@ -78,8 +74,8 @@ export default {
     }
     return {
       loginForm: {
-        email: 'admin',
-        password: '111111'
+        email: '',
+        password: ''
       },
       loginRules: {
         email: [{ required: true, trigger: 'blur', validator: validateUsername }],
@@ -121,9 +117,11 @@ export default {
           this.$store.commit('user/SET_NAME', body.name)
           this.$store.commit('user/SET_AVATAR', body.avatar)
           this.$store.commit('user/SET_USER_ID', body.userId)
-          const roleStr = body.role.role
-          const roleArr = roleStr.split(',')
-          this.$store.commit('user/SET_ROLES', roleArr)
+          if (body.role && body.role.role){
+            const roleStr = body.role.role
+            const roleArr = roleStr.split(',')
+            this.$store.commit('user/SET_ROLES', roleArr)
+          }
           this.$store.commit('user/SET_CURRENT_PROJECT_ID', body.defaultProjectId)
           if (this.$store.getters.userId) {
             await this.$store.dispatch('user/getProjectsByUser')
@@ -211,6 +209,7 @@ $light_gray:#eee;
   }
 
   .tips {
+    float: right;
     font-size: 14px;
     color: #fff;
     margin-bottom: 10px;

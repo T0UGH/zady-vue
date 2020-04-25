@@ -8,6 +8,14 @@ export function login(data) {
   })
 }
 
+export function register(data) {
+  return request({
+    url: '/user',
+    method: 'post',
+    data
+  })
+}
+
 export function switchProject(projectId) {
   return request({
     url: '/token/' + projectId,

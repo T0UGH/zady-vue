@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <el-card ref="card" v-loading="loading" class="box-card">
+    <el-card v-if="currentProject && currentProject.currentSprintId" ref="card" v-loading="loading" class="box-card">
       <div slot="header" class="clearfix">
         <el-button-group style="float: right;">
           <jump-button size="small" to="/story/insert">新增故事</jump-button>
@@ -73,18 +73,20 @@ export default {
     ])
   },
   async created() {
-    this.loading = true
-    for (let i = 0; i < this.multiList.length; i++) {
-      const item = this.multiList[i]
-      await this.loadStoryList(item.status)
-    }
-    this.$nextTick(() => {
+    if (this.currentProject && this.currentProject.currentSprintId) {
+      this.loading = true
       for (let i = 0; i < this.multiList.length; i++) {
         const item = this.multiList[i]
-        this.setSort(this.$refs[item.status][0])
+        await this.loadStoryList(item.status)
       }
-    })
-    this.loading = false
+      this.$nextTick(() => {
+        for (let i = 0; i < this.multiList.length; i++) {
+          const item = this.multiList[i]
+          this.setSort(this.$refs[item.status][0])
+        }
+      })
+      this.loading = false
+    }
   },
   methods: {
     importStory,

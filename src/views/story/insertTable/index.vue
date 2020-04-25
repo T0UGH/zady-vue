@@ -1,5 +1,6 @@
 <template>
   <common-table
+    v-if="currentProject && currentProject.currentSprintId"
     :load-request="loadRequest"
     :delete-request="deleteStory"
     :update-request="updateStory"
@@ -75,7 +76,9 @@ export default {
     }
   },
   created() {
-    this.loadBacklogs()
+    if (this.currentProject && this.currentProject.currentSprintId) {
+      this.loadBacklogs()
+    }
   },
   computed: {
     ...mapGetters([

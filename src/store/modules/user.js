@@ -60,6 +60,10 @@ const actions = {
               commit('SET_CURRENT_PROJECT', project)
             }
           })
+        } else {
+          if (res.body && res.body.length !== 0) {
+            commit('SET_CURRENT_PROJECT', res.body[0])
+          }
         }
         resolve()
       }).catch(e => {
@@ -73,6 +77,10 @@ const actions = {
       const { body } = await getUser(state.userId)
       commit('SET_NAME', body.name)
       commit('SET_AVATAR', body.avatar)
+      commit('SET_CURRENT_PROJECT_ID', body.currentProjectId)
+      if (body.role && body.role.role){
+        commit('SET_ROLES', body.role.role.split(','))
+      }
     } catch (e) {
       console.log(e)
     }

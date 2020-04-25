@@ -13,19 +13,24 @@
         <el-dropdown-menu slot="dropdown" class="user-dropdown">
           <router-link to="/">
             <el-dropdown-item>
-              Home
+              首页
             </el-dropdown-item>
           </router-link>
-          <el-dropdown-item>
+          <router-link to="/user">
+            <el-dropdown-item>
+              个人信息
+            </el-dropdown-item>
+          </router-link>
+          <el-dropdown-item v-if="currentProject">
             <el-dropdown @command="onSwitch">
-              <span>项目: {{ currentProject? currentProject.name: '' }}<i class="el-icon-caret-bottom"/></span>
+              <span>项目: {{ currentProject.name }}<i class="el-icon-caret-bottom"/></span>
               <el-dropdown-menu slot="dropdown">
                 <el-dropdown-item v-for="project in projectList" :command="project.projectId" :key="project.projectId">{{ project.name }}</el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
           </el-dropdown-item>
           <el-dropdown-item divided @click.native="logout">
-            <span style="display:block;">Log Out</span>
+            <span style="display:block;">登出</span>
           </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
